@@ -63,10 +63,12 @@ Teaching rules:
 
 ## Current state / next step
 
-- [x] Milestone 1 (code): Astro skeleton, design tokens (`src/styles/tokens.css`),
-      header placeholder (SkyScene + sticky MeadowNav), placeholder pages. Build passes.
-- [ ] Milestone 1 (deploy): connect GitHub repo to Cloudflare Pages, verify the
-      `*.pages.dev` preview. Then run the /impeccable QA pass.
+- [x] Milestone 1: Astro skeleton, design tokens (`src/styles/tokens.css`), header
+      placeholder (SkyScene + sticky MeadowNav), placeholder pages. Deployed via
+      Cloudflare Workers static assets (wrangler.jsonc → dist/), auto-build on push.
+      Preview: https://zahradnictvi-usilne.cocciron.workers.dev
+- [ ] Milestone 2: home page with real content (aktuality content collection,
+      otevírací doba, kontakt + map).
 - Supporting tokens (`--inkoust`, `--tlumena`, `--louka`, `--zavreno`) are proposed,
   not yet confirmed by the owner.
 - Keep this section updated as milestones complete.
