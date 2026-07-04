@@ -49,8 +49,6 @@
       "Read(~/.ssh/**)",
       "Read(~/.aws/**)",
       "Read(~/.config/**)",
-      "Edit(~/**)",
-      "Write(~/**)",
 
       "Bash(sudo:*)",
       "Bash(rm -rf:*)",
