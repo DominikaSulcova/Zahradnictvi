@@ -49,6 +49,17 @@ Teaching rules:
   content entirely through `/admin`. If a change would require her to touch files or
   git, it's the wrong change.
 - Running cost stays at domain-only. No paid services.
+- Impeccable is installed; use /impeccable critique|audit|polish as the QA pass at the end of each milestone; commit before running any Impeccable command and explain its changes afterward.
+
+## Design context
+
+- `PRODUCT.md` — strategy: register (brand), users, brand personality, anti-references,
+  design principles. Read before any design work.
+- `DESIGN.md` — visual system: finalized tokens (colors, fonts, card style) and agreed
+  component patterns. Seeded from the brief + prototype; re-scan after Milestone 1
+  (`/impeccable document`) to capture the real CSS tokens.
+- Precedence for visuals: DESIGN.md tokens > prototype (prototype stays authoritative
+  for layout and structure only).
 
 ## Current state / next step
 

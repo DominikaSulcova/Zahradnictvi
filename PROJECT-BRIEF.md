@@ -55,11 +55,10 @@ Single navigation bar with five items:
 
 - The nav is **embedded in the header illustration, along its lower edge**: no bar,
   no background color — just light text (`#f2f7ee` with a subtle dark text-shadow for
-  legibility) sitting directly on the meadow/hills at the bottom of the scene. The
-  active item is a light pill with dark text. The nav scrolls away with the header
-  (it is not sticky); if usability testing shows the nav is missed on long pages, a
-  "gains a background when scrolled" sticky variant can be discussed later. See the
-  prototype for the exact treatment.
+  legibility) sitting directly on the meadow strip at the bottom of the scene. The
+  active item is a light pill with dark text. The meadow strip (with its flowers and
+  walking cat) is **sticky at the top**: the sky scene scrolls away, the strip stays
+  pinned with a soft shadow. See the prototype (v4) for the exact treatment.
 - Clicking the header illustration always returns to the home page (there is no
   "Domů" nav item).
 - Home page section order: Aktuality → Otevírací doba → Kontakt (contact card + embedded
