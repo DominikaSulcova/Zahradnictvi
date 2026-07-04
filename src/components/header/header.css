@@ -1,0 +1,183 @@
+/*
+ * Header illustration styles + animations.
+ *
+ * Kept in one plain CSS file (not scoped inside a component) on purpose:
+ * in Phase 2 the drawn Procreate layers replace the placeholder SVG shapes,
+ * and these same animation classes get reapplied to the new layers.
+ *
+ * Colors inside the SVG scene are literal hex values, not tokens — they are
+ * part of the artwork (to be replaced by the drawing), not part of the UI.
+ */
+
+/* ---------- 1) Sky scene: scrolls away with the page ---------- */
+
+.sky-scene {
+  position: relative;
+  width: 100%;
+  height: 290px;
+  overflow: hidden;
+  background: linear-gradient(#e2eff2 0%, #ebf3e6 75%, #e2edda 100%);
+}
+
+.sky-scene.compact {
+  height: 200px; /* subpages get a shorter header */
+}
+
+.sky-scene svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sky-title {
+  position: absolute;
+  inset-inline: 0;
+  top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-inline: 1rem;
+  /* Let clicks pass through the text to the "back home" link around the scene. */
+  pointer-events: none;
+}
+
+.sky-scene.compact .sky-title {
+  top: 26px;
+}
+
+.site-name {
+  margin: 0;
+  font-family: var(--pismo-nadpisy);
+  font-weight: 700;
+  font-size: 2.6rem;
+  letter-spacing: -0.015em;
+  color: var(--les);
+}
+
+.sky-scene.compact .site-name {
+  font-size: 1.9rem;
+}
+
+.site-tagline {
+  margin: 4px 0 0;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  color: #48604c; /* darker shade of the scene's own greens, not a gray */
+}
+
+.header-home-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---------- 2) Meadow strip: sticky nav, part of the illustration ---------- */
+
+.meadow-strip {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  min-height: var(--vyska-nav);
+  background: var(--louka);
+  overflow: hidden;
+  box-shadow: var(--stin-nav);
+}
+
+.meadow-strip svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.strip-nav {
+  position: relative; /* keeps links above the SVG; lets the strip grow when links wrap on narrow screens */
+  min-height: var(--vyska-nav);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.nav-link {
+  font-family: var(--pismo-nadpisy);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--nav-svetla);
+  /* Light text sits directly on the meadow; the shadow keeps it legible. */
+  text-shadow: 0 1px 5px rgba(24, 38, 26, 0.55);
+  padding: 0.35rem 0.95rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.nav-link.active {
+  background: var(--nav-svetla);
+  color: var(--les);
+  text-shadow: none;
+}
+
+/* ---------- Animations (reusable for the Phase 2 drawn layers) ---------- */
+
+@keyframes cloud-a {
+  from { transform: translateX(-220px); }
+  to   { transform: translateX(1420px); }
+}
+@keyframes cloud-b {
+  from { transform: translateX(-360px); }
+  to   { transform: translateX(1420px); }
+}
+@keyframes bird-1 {
+  0%   { transform: translate(-80px, 30px); }
+  100% { transform: translate(1350px, -25px); }
+}
+@keyframes bird-2 {
+  0%   { transform: translate(-140px, 10px); }
+  100% { transform: translate(1350px, 25px); }
+}
+/* The cat walks right, flips, and walks back. */
+@keyframes cat-walk {
+  0%   { transform: translateX(-90px) scaleX(1); }
+  46%  { transform: translateX(1290px) scaleX(1); }
+  50%  { transform: translateX(1290px) scaleX(-1); }
+  96%  { transform: translateX(-90px) scaleX(-1); }
+  100% { transform: translateX(-90px) scaleX(1); }
+}
+@keyframes tail-wag {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(9deg); }
+}
+@keyframes flower-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50%      { transform: rotate(2deg); }
+}
+
+.anim-cloud-a { animation: cloud-a 85s linear infinite; }
+.anim-cloud-b { animation: cloud-b 115s linear infinite; animation-delay: -40s; }
+.anim-bird-1  { animation: bird-1 38s linear infinite; }
+.anim-bird-2  { animation: bird-2 47s linear infinite; animation-delay: -18s; }
+.anim-cat     { animation: cat-walk 70s linear infinite; }
+.anim-tail    { animation: tail-wag 1.6s ease-in-out infinite; transform-origin: 2px 10px; }
+.anim-flower  { animation: flower-sway 5s ease-in-out infinite; transform-origin: bottom center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-cloud-a,
+  .anim-cloud-b,
+  .anim-bird-1,
+  .anim-bird-2,
+  .anim-cat,
+  .anim-tail,
+  .anim-flower {
+    animation: none;
+  }
+}

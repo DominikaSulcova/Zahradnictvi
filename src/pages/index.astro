@@ -1,0 +1,41 @@
+---
+// Home page. Milestone 1: section skeleton so the nav anchors work.
+// Milestone 2 fills these with real content (aktuality from the content
+// collection, opening hours, contact + map).
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <section id="aktuality">
+    <h2>Aktuality</h2>
+    <p>Připravujeme — zde budou novinky, výprodeje a sezónní nabídka.</p>
+    <!-- Temporary check that both fonts render Czech diacritics correctly
+         (The Diacritics Rule). Remove in Milestone 2. -->
+    <p class="test-diakritiky">
+      Test diakritiky: Příliš žluťoučký kůň úpěl ďábelské ódy — ěščřžýáíéůú.
+    </p>
+  </section>
+
+  <section id="doba">
+    <h2>Otevírací doba</h2>
+    <p>Připravujeme…</p>
+  </section>
+
+  <section id="kontakt">
+    <h2>Kontakt</h2>
+    <p>Připravujeme…</p>
+  </section>
+</BaseLayout>
+
+<style>
+  section + section {
+    margin-top: 2.5rem;
+  }
+
+  .test-diakritiky {
+    font-family: var(--pismo-nadpisy);
+    font-weight: 600;
+    color: var(--tlumena);
+    font-size: 0.9rem;
+  }
+</style>
