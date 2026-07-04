@@ -1,0 +1,72 @@
+---
+// The shared page frame: <head> metadata, fonts, header illustration,
+// sticky nav, content area, footer. Every page wraps itself in this layout.
+import SkyScene from '../components/header/SkyScene.astro';
+import MeadowNav from '../components/header/MeadowNav.astro';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../components/header/header.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  compactHeader?: boolean;
+}
+
+const {
+  title = 'Zahradnictví Úsilné',
+  description = 'Rodinné zahradnictví v Úsilném u Českých Budějovic — sadba zeleniny, balkónové květiny, bylinky a trvalky.',
+  compactHeader = false,
+} = Astro.props;
+
+// Evaluated at build time; the site rebuilds on every content edit,
+// so the year stays current.
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <!-- Fonts: Google Fonts serves the latin-ext subset automatically,
+         which covers Czech diacritics (ěščřžýáíéůú). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;600&display=swap"
+    />
+  </head>
+  <body>
+    <!-- Clicking the illustration always returns home (there is no "Domů" nav item). -->
+    <a class="header-home-link" href="/" title="Zpět na úvod">
+      <SkyScene compact={compactHeader} />
+    </a>
+
+    <MeadowNav />
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <footer>© {year} Zahradnictví Úsilné</footer>
+  </body>
+</html>
+
+<style>
+  main {
+    padding-block: 2.25rem 1rem;
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    background: var(--les);
+    color: var(--pozadi);
+  }
+</style>

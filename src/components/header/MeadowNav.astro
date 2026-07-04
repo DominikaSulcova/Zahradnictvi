@@ -1,0 +1,72 @@
+---
+// The meadow strip "cut off" the bottom of the sky scene. It carries the
+// flowers, the walking cat, and the navigation, and stays sticky at the top
+// while the sky scene scrolls away.
+const links = [
+  { href: '/#aktuality', label: 'Aktuality' },
+  { href: '/#doba', label: 'Otevírací doba' },
+  { href: '/#kontakt', label: 'Kontakt' },
+  { href: '/o-nas/', label: 'O nás' },
+  { href: '/sortiment/', label: 'Sortiment' },
+];
+
+// Which link gets the active pill? Standalone pages match by path;
+// on the home page the first section (Aktuality) is the default.
+const path = Astro.url.pathname.replace(/\/$/, ''); // '' means home
+const activeByPath: Record<string, string> = {
+  '': 'Aktuality',
+  '/o-nas': 'O nás',
+  '/sortiment': 'Sortiment',
+};
+const activeLabel = activeByPath[path] ?? '';
+
+// Flowers along the strip, as data (x, color, sway delay, scale).
+const flowers = [
+  { x: 70, y: 54, color: '#d98ca6', delay: 0, s: 0.85 },
+  { x: 140, y: 56, color: '#e9d26a', delay: 1.2, s: 0.7 },
+  { x: 250, y: 54, color: '#b48ecb', delay: 0.6, s: 0.8 },
+  { x: 360, y: 56, color: '#e6eef0', delay: 2.1, s: 0.7 },
+  { x: 455, y: 54, color: '#d98ca6', delay: 1.6, s: 0.8 },
+  { x: 740, y: 54, color: '#e9d26a', delay: 0.4, s: 0.8 },
+  { x: 845, y: 56, color: '#b48ecb', delay: 2.4, s: 0.7 },
+  { x: 955, y: 54, color: '#d98ca6', delay: 1.0, s: 0.8 },
+  { x: 1065, y: 56, color: '#e6eef0', delay: 0.2, s: 0.7 },
+  { x: 1140, y: 54, color: '#e9d26a', delay: 1.8, s: 0.8 },
+];
+---
+
+<div class="meadow-strip">
+  <svg viewBox="0 0 1200 56" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <!-- meadow body with a soft darker base -->
+    <rect x="0" y="0" width="1200" height="56" fill="#5d8a58"></rect>
+    <path d="M0 56 L0 44 Q 300 38 600 44 T 1200 42 L 1200 56 Z" fill="#54804f"></path>
+
+    <!-- swaying flowers -->
+    {flowers.map(({ x, y, color, delay, s }) => (
+      <g class="anim-flower" style={`animation-delay: ${delay}s`} transform={`translate(${x} ${y}) scale(${s})`}>
+        <line x1="0" y1="0" x2="0" y2="-16" stroke="#3f6a44" stroke-width="1.6"></line>
+        <circle cx="0" cy="-19" r="4.5" fill={color}></circle>
+        <circle cx="0" cy="-19" r="1.7" fill="#f6e8b8"></circle>
+      </g>
+    ))}
+
+    <!-- the cat keeps walking across the nav -->
+    <g class="anim-cat">
+      <g transform="translate(0 30)">
+        <ellipse cx="14" cy="6" rx="15" ry="7" fill="#3a3530"></ellipse>
+        <circle cx="30" cy="-2" r="6" fill="#3a3530"></circle>
+        <polygon points="26,-6 28,-12 31,-6" fill="#3a3530"></polygon>
+        <polygon points="31,-6 34,-12 36,-6" fill="#3a3530"></polygon>
+        <path class="anim-tail" d="M0 4 q -9 -4 -8 -14" stroke="#3a3530" stroke-width="3.4" fill="none" stroke-linecap="round"></path>
+        <line x1="7" y1="12" x2="7" y2="18" stroke="#3a3530" stroke-width="3" stroke-linecap="round"></line>
+        <line x1="21" y1="12" x2="21" y2="18" stroke="#3a3530" stroke-width="3" stroke-linecap="round"></line>
+      </g>
+    </g>
+  </svg>
+
+  <nav class="strip-nav" aria-label="Hlavní navigace">
+    {links.map(({ href, label }) => (
+      <a class:list={['nav-link', { active: label === activeLabel }]} href={href}>{label}</a>
+    ))}
+  </nav>
+</div>

@@ -63,6 +63,10 @@ Teaching rules:
 
 ## Current state / next step
 
-- [ ] Milestone 1: repo + Astro skeleton + design tokens + header placeholder,
-      deployed to a `*.pages.dev` preview.
+- [x] Milestone 1 (code): Astro skeleton, design tokens (`src/styles/tokens.css`),
+      header placeholder (SkyScene + sticky MeadowNav), placeholder pages. Build passes.
+- [ ] Milestone 1 (deploy): connect GitHub repo to Cloudflare Pages, verify the
+      `*.pages.dev` preview. Then run the /impeccable QA pass.
+- Supporting tokens (`--inkoust`, `--tlumena`, `--louka`, `--zavreno`) are proposed,
+  not yet confirmed by the owner.
 - Keep this section updated as milestones complete.

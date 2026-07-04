@@ -1,0 +1,61 @@
+/* Base styles shared by every page. Anything visual that repeats site-wide
+ * belongs here; one-off styles live next to their component. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Smooth scrolling for the nav's #anchor links… */
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    /* …but jump instantly for people who prefer reduced motion. */
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--pismo-text);
+  background: var(--pozadi);
+  color: var(--inkoust);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--pismo-nadpisy);
+  color: var(--les);
+  text-wrap: balance;
+}
+
+p {
+  max-width: 70ch; /* comfortable reading line length */
+}
+
+a {
+  color: var(--les);
+}
+
+/* Anchored sections stop below the sticky nav instead of hiding under it. */
+section[id] {
+  scroll-margin-top: calc(var(--vyska-nav) + 1rem);
+}
+
+/* Visible keyboard focus everywhere (accessibility quality floor). */
+:focus-visible {
+  outline: 3px solid var(--les);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: 56rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}

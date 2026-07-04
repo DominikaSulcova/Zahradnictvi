@@ -1,0 +1,37 @@
+/*
+ * Design tokens — the single place where colors, fonts, and shared values live.
+ * Edit here and the whole site follows. Token names are Czech (matching the
+ * brief); comments are English.
+ */
+:root {
+  /* --- Core palette (finalized in PROJECT-BRIEF.md) --- */
+  --les: #2c5e37;        /* primary forest green: headings, footer, active-pill text */
+  --pozadi: #eef5ec;     /* pale green page background */
+  --karta: #ffffff;      /* card surface */
+  --novinka: #1f9d55;    /* aktualita accent: news */
+  --vyprodej: #d9432f;   /* aktualita accent: sale */
+  --sezonni: #85603c;    /* aktualita accent: seasonal */
+  --nav-svetla: #f2f7ee; /* light nav text on the meadow strip */
+
+  /* --- Supporting tokens (proposed in Milestone 1 — owner to confirm) --- */
+  --inkoust: #22301f;     /* body text ("ink"): near-black with the forest hue */
+  --tlumena: #5a6a54;     /* muted text: dates, captions (≥4.5:1 on both backgrounds) */
+  --louka: #5d8a58;       /* meadow strip green (matches the illustrated scene) */
+  --louka-tmava: #54804f; /* darker meadow base along the strip's bottom edge */
+  --zavreno: #b23a28;     /* "zavřeno" red in the opening-hours table */
+
+  /* --- Typography --- */
+  --pismo-nadpisy: 'Bricolage Grotesque', system-ui, sans-serif;
+  --pismo-text: 'Figtree', system-ui, sans-serif;
+
+  /* --- Surfaces: soft shadows, no borders, 16px radius (DESIGN.md) --- */
+  --radius-karta: 16px;
+  --stin-karta: 0 2px 12px rgba(34, 48, 31, 0.08);
+  --stin-nav: 0 2px 10px rgba(34, 48, 31, 0.18);
+
+  /* --- Layout --- */
+  --vyska-nav: 56px; /* min-height of the sticky meadow strip */
+
+  /* Semantic z-index scale — add steps (modal, toast…) as they become needed */
+  --z-sticky: 30;
+}
