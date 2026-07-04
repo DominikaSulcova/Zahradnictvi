@@ -1,0 +1,113 @@
+---
+// One news card: accent bar on top, style pill + date row, title, short text.
+// The entry's `style` field (novinka / vyprodej / sezonni) is the only
+// appearance choice the editor gets (DESIGN.md: The Three Styles Rule).
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'aktuality'>;
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const LABELS = {
+  novinka: 'Novinka',
+  vyprodej: 'Výprodej',
+  sezonni: 'Sezónní',
+};
+
+// "1. 7. 2026" — the Czech short date format, generated from the real Date
+// so entries never need a hand-formatted date string.
+const datum = new Intl.DateTimeFormat('cs-CZ', {
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+}).format(entry.data.date);
+---
+
+<article class:list={['karta', `aktualita--${entry.data.style}`]}>
+  <div class="accent-bar"></div>
+  <div class="card-body">
+    <div class="meta-row">
+      <span class="pill">{LABELS[entry.data.style]}</span>
+      <time datetime={entry.data.date.toISOString().slice(0, 10)}>{datum}</time>
+    </div>
+    <h3>{entry.data.title}</h3>
+    <div class="text">
+      <Content />
+    </div>
+  </div>
+</article>
+
+<style>
+  /* Each style variant only sets --akcent; everything below reads it.
+     Adding a fourth style one day = one token + one line here. */
+  .aktualita--novinka {
+    --akcent: var(--novinka);
+  }
+  .aktualita--vyprodej {
+    --akcent: var(--vyprodej);
+  }
+  .aktualita--sezonni {
+    --akcent: var(--sezonni);
+  }
+
+  article {
+    /* Clip the accent bar to the card's rounded corners. */
+    overflow: hidden;
+  }
+
+  .accent-bar {
+    height: 4px;
+    background: var(--akcent);
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    /* Tint the accent for the pill: light wash behind, darkened ink on top.
+       color-mix keeps both derived from the one --akcent token, so the pill
+       always matches its accent bar (and stays WCAG-readable). */
+    background: color-mix(in srgb, var(--akcent) 14%, white);
+    color: color-mix(in srgb, var(--akcent) 60%, var(--inkoust));
+  }
+
+  time {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--tlumena);
+  }
+
+  h3 {
+    margin: 0.5rem 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .text {
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+
+  .text :global(p) {
+    margin: 0.35rem 0 0;
+  }
+</style>

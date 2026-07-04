@@ -67,3 +67,11 @@ section[id] {
   margin-inline: auto;
   padding-inline: 1rem;
 }
+
+/* The one card surface used by every content block (DESIGN.md: soft shadow,
+ * no border, 16px radius — The No-Border Rule). */
+.karta {
+  background: var(--karta);
+  border-radius: var(--radius-karta);
+  box-shadow: var(--stin-karta);
+}

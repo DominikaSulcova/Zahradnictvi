@@ -1,0 +1,30 @@
+---
+// Section heading with a small uppercase "eyebrow" label above it — the
+// prototype's SectionTitle pattern. Usage:
+//   <SectionTitle eyebrow="Kdy k nám">Otevírací doba</SectionTitle>
+interface Props {
+  eyebrow?: string;
+}
+const { eyebrow } = Astro.props;
+---
+
+{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+<h2><slot /></h2>
+
+<style>
+  .eyebrow {
+    margin: 0;
+    font-family: var(--pismo-text);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--les-tlumeny);
+  }
+
+  h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.55rem;
+    letter-spacing: -0.01em;
+  }
+</style>

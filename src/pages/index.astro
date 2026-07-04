@@ -1,29 +1,74 @@
 ---
-// Home page. Milestone 1: section skeleton so the nav anchors work.
-// Milestone 2 fills these with real content (aktuality from the content
-// collection, opening hours, contact + map).
+// Home page: aktuality from the content collection, opening hours,
+// contact card + map. Section order per the brief: Aktuality → Doba → Kontakt.
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import AktualitaCard from '../components/AktualitaCard.astro';
+
+// Only published entries, newest first.
+const aktuality = (await getCollection('aktuality', ({ data }) => data.published))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <BaseLayout>
   <section id="aktuality">
-    <h2>Aktuality</h2>
-    <p>Připravujeme — zde budou novinky, výprodeje a sezónní nabídka.</p>
-    <!-- Temporary check that both fonts render Czech diacritics correctly
-         (The Diacritics Rule). Remove in Milestone 2. -->
-    <p class="test-diakritiky">
-      Test diakritiky: Příliš žluťoučký kůň úpěl ďábelské ódy — ěščřžýáíéůú.
-    </p>
+    <SectionTitle eyebrow="Co je u nás nového">Aktuality</SectionTitle>
+    <div class="section-content aktuality-list">
+      {aktuality.map((entry) => <AktualitaCard entry={entry} />)}
+    </div>
   </section>
 
   <section id="doba">
-    <h2>Otevírací doba</h2>
-    <p>Připravujeme…</p>
+    <SectionTitle eyebrow="Kdy k nám">Otevírací doba</SectionTitle>
+    <div class="section-content hours-card karta">
+      <table>
+        <tbody>
+          <tr>
+            <th scope="row">pondělí – pátek</th>
+            <td>8:00 – 16:30</td>
+          </tr>
+          <tr>
+            <th scope="row">sobota</th>
+            <td>8:00 – 12:00</td>
+          </tr>
+          <tr>
+            <th scope="row">neděle a svátky</th>
+            <td class="closed">zavřeno</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="hours-note">Mimo otevírací dobu po telefonické domluvě.</p>
+    </div>
   </section>
 
   <section id="kontakt">
-    <h2>Kontakt</h2>
-    <p>Připravujeme…</p>
+    <SectionTitle eyebrow="Kde nás najdete">Kontakt</SectionTitle>
+    <div class="section-content contact-grid">
+      <div class="karta contact-card">
+        <p>
+          <strong>Úsilné 9, 370 10 Úsilné</strong><br />
+          u Českých Budějovic
+        </p>
+        <p class="contact-links">
+          <a href="tel:+420732264647">732 264 647</a><br />
+          <a href="mailto:marie.sulcova@volny.cz">marie.sulcova@volny.cz</a>
+          <!-- TODO(Domi): add the Facebook link here once we have the real URL:
+               <br /><a href="…">Facebook — Zahradnictví Úsilné</a> -->
+        </p>
+      </div>
+      <div class="karta map-card">
+        <!-- Google Maps embed (keyless, free). `output=embed` renders the
+             plain embeddable map; hl=cs keeps its UI in Czech. -->
+        <iframe
+          src="https://maps.google.com/maps?q=Zahradnictv%C3%AD+%C3%9Asiln%C3%A9,+%C3%9Asiln%C3%A9+9,+370+10+%C3%9Asiln%C3%A9&z=15&hl=cs&output=embed"
+          title="Mapa — Zahradnictví Úsilné"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
   </section>
 </BaseLayout>
 
@@ -32,10 +77,99 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-top: 2.5rem;
   }
 
-  .test-diakritiky {
+  .section-content {
+    margin-top: 1.25rem;
+  }
+
+  .aktuality-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  /* --- Otevírací doba --- */
+  .hours-card {
+    max-width: 32rem;
+    padding: 1.25rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+  }
+
+  tr + tr {
+    border-top: 1px solid var(--pozadi);
+  }
+
+  th {
+    padding: 0.6rem 0;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  td {
+    padding: 0.6rem 0;
+    text-align: right;
     font-family: var(--pismo-nadpisy);
     font-weight: 600;
+    color: var(--les);
+  }
+
+  td.closed {
+    color: var(--zavreno);
+  }
+
+  .hours-note {
+    margin: 0.9rem 0 0;
+    font-size: 0.88rem;
     color: var(--tlumena);
-    font-size: 0.9rem;
+  }
+
+  /* --- Kontakt --- */
+  .contact-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  /* Contact card and map side by side once there's room (desktop). */
+  @media (min-width: 44rem) {
+    .contact-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .contact-card {
+    padding: 1.25rem;
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+
+  .contact-card p {
+    margin: 0;
+  }
+
+  /* More specific than `.contact-card p` above, so this margin wins. */
+  .contact-card .contact-links {
+    margin-top: 0.9rem;
+    line-height: 2.1;
+  }
+
+  .contact-links a {
+    font-weight: 600;
+  }
+
+  .map-card {
+    /* Clip the iframe to the card's rounded corners. */
+    overflow: hidden;
+    min-height: 15rem;
+    display: grid;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 15rem;
+    border: 0;
   }
 </style>
