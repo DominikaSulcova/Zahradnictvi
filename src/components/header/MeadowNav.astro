@@ -37,9 +37,10 @@ const flowers = [
 
 <div class="meadow-strip">
   <svg viewBox="0 0 1200 56" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <!-- meadow body with a soft darker base -->
-    <rect x="0" y="0" width="1200" height="56" fill="#5d8a58"></rect>
-    <path d="M0 56 L0 44 Q 300 38 600 44 T 1200 42 L 1200 56 Z" fill="#54804f"></path>
+    <!-- meadow body with a soft darker base; bound to the tokens so the
+         strip color always matches tokens.css (nav text contrast depends on it) -->
+    <rect x="0" y="0" width="1200" height="56" style="fill: var(--louka)"></rect>
+    <path d="M0 56 L0 44 Q 300 38 600 44 T 1200 42 L 1200 56 Z" style="fill: var(--louka-tmava)"></path>
 
     <!-- swaying flowers -->
     {flowers.map(({ x, y, color, delay, s }) => (

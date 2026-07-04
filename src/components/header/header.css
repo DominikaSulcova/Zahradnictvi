@@ -51,13 +51,14 @@
   margin: 0;
   font-family: var(--pismo-nadpisy);
   font-weight: 700;
-  font-size: 2.6rem;
+  /* Scales down on narrow phones so the name never wraps into the scene. */
+  font-size: clamp(1.9rem, 4.5vw + 1rem, 2.6rem);
   letter-spacing: -0.015em;
   color: var(--les);
 }
 
 .sky-scene.compact .site-name {
-  font-size: 1.9rem;
+  font-size: clamp(1.5rem, 3vw + 0.9rem, 1.9rem);
 }
 
 .site-tagline {
@@ -65,7 +66,7 @@
   font-weight: 600;
   font-size: 0.92rem;
   letter-spacing: 0.02em;
-  color: #48604c; /* darker shade of the scene's own greens, not a gray */
+  color: var(--les-tlumeny); /* darker shade of the scene's own greens, not a gray */
 }
 
 .header-home-link {
@@ -110,8 +111,8 @@
   font-size: 0.95rem;
   color: var(--nav-svetla);
   /* Light text sits directly on the meadow; the shadow keeps it legible. */
-  text-shadow: 0 1px 5px rgba(24, 38, 26, 0.55);
-  padding: 0.35rem 0.95rem;
+  text-shadow: var(--stin-text-nav);
+  padding: 0.5rem 0.95rem; /* taller = easier to tap on phones */
   border-radius: 999px;
   text-decoration: none;
   transition: background 0.15s;
@@ -119,6 +120,11 @@
 
 .nav-link:hover {
   background: rgba(255, 255, 255, 0.16);
+}
+
+.nav-link:focus-visible {
+  /* The site-wide green outline would vanish on the green meadow. */
+  outline-color: var(--nav-svetla);
 }
 
 .nav-link.active {

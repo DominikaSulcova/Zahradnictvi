@@ -42,10 +42,14 @@ const year = new Date().getFullYear();
     />
   </head>
   <body>
-    <!-- Clicking the illustration always returns home (there is no "Domů" nav item). -->
-    <a class="header-home-link" href="/" title="Zpět na úvod">
-      <SkyScene compact={compactHeader} />
-    </a>
+    <!-- Clicking the illustration always returns home (there is no "Domů" nav item).
+         Note: the nav strip stays OUTSIDE <header> — position:sticky only works
+         while its parent is on screen, and the header scrolls away. -->
+    <header>
+      <a class="header-home-link" href="/" title="Zpět na úvod">
+        <SkyScene compact={compactHeader} />
+      </a>
+    </header>
 
     <MeadowNav />
 

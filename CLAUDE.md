@@ -69,6 +69,7 @@ Teaching rules:
       Preview: https://zahradnictvi-usilne.cocciron.workers.dev
 - [ ] Milestone 2: home page with real content (aktuality content collection,
       otevírací doba, kontakt + map).
-- Supporting tokens (`--inkoust`, `--tlumena`, `--louka`, `--zavreno`) are proposed,
-  not yet confirmed by the owner.
+- Supporting tokens: `--louka`/`--louka-tmava` confirmed by the owner (darkened for
+  WCAG nav contrast, 2026-07-04); `--inkoust`, `--tlumena`, `--zavreno`,
+  `--les-tlumeny` still proposed.
 - Keep this section updated as milestones complete.
