@@ -67,8 +67,13 @@ Teaching rules:
       placeholder (SkyScene + sticky MeadowNav), placeholder pages. Deployed via
       Cloudflare Workers static assets (wrangler.jsonc → dist/), auto-build on push.
       Preview: https://zahradnictvi-usilne.cocciron.workers.dev
-- [ ] Milestone 2: home page with real content (aktuality content collection,
-      otevírací doba, kontakt + map).
+- [x] Milestone 2: home page with real content — aktuality content collection
+      (3 seed entries), otevírací doba card, kontakt + Google Maps embed;
+      SectionTitle + AktualitaCard components, shared `.karta` surface.
+      Open: Facebook URL in the contact card (owner adds it — TODO in
+      index.astro); prototype watch-items to confirm: eyebrow labels on every
+      section, identical Sortiment card grid.
+- [ ] Milestone 3: O nás + Sortiment pages.
 - Supporting tokens: `--louka`/`--louka-tmava` confirmed by the owner (darkened for
   WCAG nav contrast, 2026-07-04); `--inkoust`, `--tlumena`, `--zavreno`,
   `--les-tlumeny` still proposed.
