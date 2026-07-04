@@ -12,12 +12,6 @@
       "Glob(**)",
       "Grep(**)",
 
-      "Bash(node:*)",
-      "Bash(npm install:*)",
-      "Bash(npm run:*)",
-      "Bash(npm create:*)",
-      "Bash(npx astro:*)",
-
       "Bash(git init:*)",
       "Bash(git status:*)",
       "Bash(git add:*)",
@@ -41,7 +35,12 @@
       "Bash(git remote:*)",
       "Bash(npx wrangler:*)",
       "Bash(gh:*)",
-      "WebFetch"
+      "WebFetch",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(npm create:*)",
+      "Bash(npx astro:*)"
     ],
 
     "deny": [
