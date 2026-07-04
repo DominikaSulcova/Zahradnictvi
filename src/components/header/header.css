@@ -19,10 +19,6 @@
   background: linear-gradient(#e2eff2 0%, #ebf3e6 75%, #e2edda 100%);
 }
 
-.sky-scene.compact {
-  height: 200px; /* subpages get a shorter header */
-}
-
 .sky-scene svg {
   position: absolute;
   inset: 0;
@@ -43,10 +39,6 @@
   pointer-events: none;
 }
 
-.sky-scene.compact .sky-title {
-  top: 26px;
-}
-
 .site-name {
   margin: 0;
   font-family: var(--pismo-nadpisy);
@@ -55,10 +47,6 @@
   font-size: clamp(1.9rem, 4.5vw + 1rem, 2.6rem);
   letter-spacing: -0.015em;
   color: var(--les);
-}
-
-.sky-scene.compact .site-name {
-  font-size: clamp(1.5rem, 3vw + 0.9rem, 1.9rem);
 }
 
 .site-tagline {

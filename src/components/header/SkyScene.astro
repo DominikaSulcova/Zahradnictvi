@@ -2,10 +2,7 @@
 // The illustrated sky scene: sun, clouds, birds, hills, farmhouse, trees.
 // Phase 1 placeholder — every group below will be replaced by a drawn layer
 // exported from Procreate (same structure, same animation classes).
-interface Props {
-  compact?: boolean; // subpages show a shorter header
-}
-const { compact = false } = Astro.props;
+// The scene is identical on every page (owner decision, 2026-07-04).
 
 // Trees are the same shape at different positions/sizes, so we describe them
 // as data and let the template repeat the markup for us.
@@ -17,7 +14,7 @@ const trees = [
 ];
 ---
 
-<div class:list={['sky-scene', { compact }]}>
+<div class="sky-scene">
   <svg viewBox="0 0 1200 290" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
     <!-- sun -->
     <circle cx="150" cy="66" r="34" fill="#f5e6a8" opacity="0.9"></circle>

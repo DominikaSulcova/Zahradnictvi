@@ -10,13 +10,11 @@ import '../components/header/header.css';
 interface Props {
   title?: string;
   description?: string;
-  compactHeader?: boolean;
 }
 
 const {
   title = 'Zahradnictví Úsilné',
   description = 'Rodinné zahradnictví v Úsilném u Českých Budějovic — sadba zeleniny, balkónové květiny, bylinky a trvalky.',
-  compactHeader = false,
 } = Astro.props;
 
 // Evaluated at build time; the site rebuilds on every content edit,
@@ -47,7 +45,7 @@ const year = new Date().getFullYear();
          while its parent is on screen, and the header scrolls away. -->
     <header>
       <a class="header-home-link" href="/" title="Zpět na úvod">
-        <SkyScene compact={compactHeader} />
+        <SkyScene />
       </a>
     </header>
 
