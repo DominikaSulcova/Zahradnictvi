@@ -1,0 +1,10 @@
+// Config for Wrangler, Cloudflare's deploy tool.
+// This project is a purely static site: no server code, just the files
+// Astro builds into dist/. Wrangler uploads that folder to Cloudflare's CDN.
+{
+  "name": "zahradnictvi-usilne",
+  "compatibility_date": "2026-07-04",
+  "assets": {
+    "directory": "./dist"
+  }
+}
