@@ -28,16 +28,18 @@ const { subtitle, plant } = Astro.props;
   }
 
   h2 {
-    margin: 0;
-    font-size: 1.25rem;
+    /* Size and tracking owner-tuned up from the spec's 19px/1.8px reference. */
+    margin: 0.1rem 0 0 10px;
+    font-size: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.095em; /* ≈ the spec's 1.8px at its 19px reference size */
+    letter-spacing: 0.075em;
   }
 
   .podtitul {
-    /* Handwritten line, pulled 22px left of the heading start so it leans
-       toward the plant (spec §1.2). Caveat is used ONLY here — spec §5. */
-    margin: 0.1rem 0 0 -22px;
+    /* Handwritten line, indented right so it reads as a note under the
+       heading (owner's tweak; spec §1.2 had it pulled left instead).
+       Caveat is used ONLY here — spec §5. */
+    margin: 0.1rem 0 0 60px;
     font-family: var(--pismo-rukopis);
     font-weight: 500;
     font-size: 1.35rem;
