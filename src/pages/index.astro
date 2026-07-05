@@ -12,6 +12,10 @@ const aktuality = (await getCollection('aktuality', ({ data }) => data.published
 ---
 
 <BaseLayout>
+  <!-- The visible site name is a styled <p> in the header illustration, so the
+       page's actual h1 is screen-reader-only (audit 2026-07-05, P2). -->
+  <h1 class="sr-only">Zahradnictví Úsilné</h1>
+
   <section id="aktuality">
     <SectionTitle plant="tulip" subtitle="co je u nás nového">Aktuality</SectionTitle>
     <div class="aktuality-list">

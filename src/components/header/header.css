@@ -111,7 +111,9 @@
   transition: background 0.15s;
 }
 
-/* All five links in one row down to small phones: shrink type, not layout. */
+/* All five links in one row down to small phones: shrink type, not layout.
+ * Vertical padding grows as the type shrinks so the tap area stays ≥44px
+ * (older visitors on phones are the primary audience). */
 @media (max-width: 44rem) {
   .strip-nav {
     justify-content: space-between;
@@ -119,14 +121,22 @@
   }
   .nav-link {
     font-size: 0.8rem;
-    padding: 0.5rem 0.45rem;
+    padding: 0.9rem 0.45rem;
   }
 }
 
 @media (max-width: 26rem) {
   .nav-link {
     font-size: 0.68rem;
-    padding: 0.5rem 0.3rem;
+    padding: 0.95rem 0.3rem;
+  }
+}
+
+/* Smallest phones (~320px): one last size step so the row never overflows. */
+@media (max-width: 21rem) {
+  .nav-link {
+    font-size: 0.62rem;
+    padding: 1rem 0.2rem;
   }
 }
 
