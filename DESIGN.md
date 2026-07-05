@@ -136,7 +136,8 @@ handwritten voice that carries the postcard feeling — direction "6a" (design-u
   under each section heading, pulled 22px left toward the plant icon.
 - **Card title** (Sora 700): in inkoust, not green.
 - **Body** (Manrope 400, line-height ≈1.55): card copy in tlumená; max line length 65–75ch.
-- **Label** (Manrope 600–700): style pills (700), dates (400), nav items (600).
+- **Label** (Manrope 600–700): style pills (700), dates (400).
+- **Nav items** (Sora 600): owner preference (2026-07-05) over the spec's Manrope.
 
 ### Named Rules
 **The Diacritics Rule.** Fonts load with the `latin-ext` subset and ěščřžýáíéůú must
@@ -185,7 +186,9 @@ the tokens above override its colors and fonts. Components below are the agreed 
 - **Active state:** a light pill (`#f2f7ee` background) with les-green text.
 - **Behavior:** the meadow strip detaches from the sky scene and stays **sticky at
   the top** (soft shadow while pinned); the sky scene scrolls away. Clicking the
-  header illustration returns home; there is no "Domů" item.
+  header illustration returns home; there is no "Domů" item. On narrow screens the
+  links **wrap into two centered rows** (owner decision 2026-07-05, supersedes the
+  6a spec's no-wrap rule; anchor offsets compensate for the taller strip).
 - **Items:** Aktuality, Otevírací doba, Kontakt (home anchors) · O nás, Sortiment (pages).
 
 ### Cards / Containers (hours, contact, sortiment categories)
