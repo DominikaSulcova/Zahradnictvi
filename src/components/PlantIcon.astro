@@ -1,0 +1,69 @@
+---
+// Little potted-plant icons for section headings (design-update.md §3.4).
+// All three share the terracotta pot and green stem; only the flower differs:
+// tulip (Aktuality), daisy (Otevírací doba), blossom branch (Kontakt).
+interface Props {
+  plant: 'tulip' | 'daisy' | 'blossom';
+}
+const { plant } = Astro.props;
+---
+
+<svg class="plant" width="38" height="48" viewBox="0 0 38 48" aria-hidden="true">
+  {plant === 'tulip' && (
+    <>
+      <path class="stem" d="M19 31 V15"></path>
+      <path d="M19 27 C14 25 12 20 13 15 C17 17 19 21 19 27 Z" fill="var(--novinka)"></path>
+      <path d="M19 27 C24 25 26 20 25 15 C21 17 19 21 19 27 Z" fill="var(--novinka)" opacity="0.75"></path>
+      <path
+        d="M13 14 C13 8 14.5 5.5 16 4 C17 7 18 8.5 19 8.5 C20 8.5 21 7 22 4 C23.5 5.5 25 8 25 14 C23 15.8 21 16.5 19 16.5 C17 16.5 15 15.8 13 14 Z"
+        fill="var(--vyprodej)"
+      ></path>
+    </>
+  )}
+
+  {plant === 'daisy' && (
+    <>
+      <path class="stem" d="M19 31 V16"></path>
+      <path d="M19 26 C15 24.5 13.5 21 14 18 C17 19.5 19 22 19 26 Z" fill="var(--novinka)"></path>
+      {/* six petals arranged hexagonally around the center */}
+      <circle cx="24.2" cy="12" r="3.1" fill="var(--vyprodej)"></circle>
+      <circle cx="21.6" cy="16.5" r="3.1" fill="var(--vyprodej)"></circle>
+      <circle cx="16.4" cy="16.5" r="3.1" fill="var(--vyprodej)"></circle>
+      <circle cx="13.8" cy="12" r="3.1" fill="var(--vyprodej)"></circle>
+      <circle cx="16.4" cy="7.5" r="3.1" fill="var(--vyprodej)"></circle>
+      <circle cx="21.6" cy="7.5" r="3.1" fill="var(--vyprodej)"></circle>
+      <circle cx="19" cy="12" r="3.4" fill="var(--slunce)"></circle>
+    </>
+  )}
+
+  {plant === 'blossom' && (
+    <>
+      <path class="stem" d="M19 31 V12"></path>
+      <path class="stem" d="M19 23 C16.5 21.5 14.5 19.5 13.5 16.5"></path>
+      <path class="stem" d="M19 19 C21.5 17.5 23.5 15.5 24.5 12.5"></path>
+      <circle cx="19" cy="9.5" r="3.4" fill="var(--vyprodej)"></circle>
+      <circle cx="13" cy="14.5" r="2.7" fill="var(--vyprodej)"></circle>
+      <circle cx="25" cy="10.5" r="2.7" fill="var(--vyprodej)"></circle>
+      <circle cx="19" cy="9.5" r="1.1" fill="var(--slunce)"></circle>
+      <circle cx="13" cy="14.5" r="1.1" fill="var(--slunce)"></circle>
+      <circle cx="25" cy="10.5" r="1.1" fill="var(--slunce)"></circle>
+    </>
+  )}
+
+  <!-- shared terracotta pot: rim + tapered body (spec geometry) -->
+  <rect x="10.5" y="31.5" width="17" height="4" rx="2" fill="var(--sezonni)"></rect>
+  <path d="M12 34 h14 l-2 11 H14 Z" fill="var(--sezonni)"></path>
+</svg>
+
+<style>
+  .plant {
+    flex: none; /* never squash inside the heading's flex row */
+  }
+
+  .stem {
+    fill: none;
+    stroke: var(--novinka);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+</style>

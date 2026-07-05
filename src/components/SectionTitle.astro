@@ -1,30 +1,47 @@
 ---
-// Section heading with a small uppercase "eyebrow" label above it — the
-// prototype's SectionTitle pattern. Usage:
-//   <SectionTitle eyebrow="Kdy k nám">Otevírací doba</SectionTitle>
+// Section heading block (design-update.md §2.3): plant icon on the left,
+// uppercase heading with a handwritten sub-heading tucked underneath. Usage:
+//   <SectionTitle plant="tulip" subtitle="co je u nás nového">Aktuality</SectionTitle>
+import PlantIcon from './PlantIcon.astro';
+
 interface Props {
-  eyebrow?: string;
+  subtitle?: string;
+  plant?: 'tulip' | 'daisy' | 'blossom';
 }
-const { eyebrow } = Astro.props;
+const { subtitle, plant } = Astro.props;
 ---
 
-{eyebrow && <p class="eyebrow">{eyebrow}</p>}
-<h2><slot /></h2>
+<div class="section-title">
+  {plant && <PlantIcon plant={plant} />}
+  <div>
+    <h2><slot /></h2>
+    {subtitle && <p class="podtitul">… {subtitle}</p>}
+  </div>
+</div>
 
 <style>
-  .eyebrow {
-    margin: 0;
-    font-family: var(--pismo-text);
-    font-weight: 600;
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--les-tlumeny);
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
   }
 
   h2 {
-    margin: 0.15rem 0 0;
-    font-size: 1.55rem;
-    letter-spacing: -0.01em;
+    margin: 0;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.095em; /* ≈ the spec's 1.8px at its 19px reference size */
+  }
+
+  .podtitul {
+    /* Handwritten line, pulled 22px left of the heading start so it leans
+       toward the plant (spec §1.2). Caveat is used ONLY here — spec §5. */
+    margin: 0.1rem 0 0 -22px;
+    font-family: var(--pismo-rukopis);
+    font-weight: 500;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: var(--odkaz);
   }
 </style>

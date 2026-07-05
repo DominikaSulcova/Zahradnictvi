@@ -13,15 +13,15 @@ const aktuality = (await getCollection('aktuality', ({ data }) => data.published
 
 <BaseLayout>
   <section id="aktuality">
-    <SectionTitle eyebrow="Co je u nás nového">Aktuality</SectionTitle>
-    <div class="section-content aktuality-list">
+    <SectionTitle plant="tulip" subtitle="co je u nás nového">Aktuality</SectionTitle>
+    <div class="aktuality-list">
       {aktuality.map((entry) => <AktualitaCard entry={entry} />)}
     </div>
   </section>
 
   <section id="doba">
-    <SectionTitle eyebrow="Kdy k nám">Otevírací doba</SectionTitle>
-    <div class="section-content hours-card karta">
+    <SectionTitle plant="daisy" subtitle="kdy k nám">Otevírací doba</SectionTitle>
+    <div class="hours-card karta">
       <table>
         <tbody>
           <tr>
@@ -43,21 +43,50 @@ const aktuality = (await getCollection('aktuality', ({ data }) => data.published
   </section>
 
   <section id="kontakt">
-    <SectionTitle eyebrow="Kde nás najdete">Kontakt</SectionTitle>
-    <div class="section-content contact-grid">
-      <div class="karta contact-card">
-        <p>
-          <strong>Úsilné 9, 370 10 Úsilné</strong><br />
-          u Českých Budějovic
+    <SectionTitle plant="blossom" subtitle="kde nás najdete">Kontakt</SectionTitle>
+    <div class="karta contact-card">
+      <div class="contact-lines">
+        <p class="contact-line">
+          <!-- map-pin icon (spec §3.1: thin emerald strokes, round caps) -->
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21c-4-4.5-7-7.8-7-11a7 7 0 0 1 14 0c0 3.2-3 6.5-7 11z"></path>
+            <circle cx="12" cy="10" r="2.6"></circle>
+          </svg>
+          <span>
+            <strong>Úsilné 9, 370 10 Úsilné</strong><br />
+            <span class="muted">u Českých Budějovic</span>
+          </span>
         </p>
-        <p class="contact-links">
-          <a href="tel:+420732264647">732 264 647</a><br />
+        <p class="contact-line">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 4h4l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path>
+          </svg>
+          <a href="tel:+420732264647">732 264 647</a>
+        </p>
+        <p class="contact-line">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5.5" width="18" height="13" rx="2"></rect>
+            <path d="M3.5 7l8.5 6 8.5-6"></path>
+          </svg>
           <a href="mailto:marie.sulcova@volny.cz">marie.sulcova@volny.cz</a>
-          <!-- TODO(Domi): add the Facebook link here once we have the real URL:
-               <br /><a href="…">Facebook — Zahradnictví Úsilné</a> -->
+        </p>
+        <p class="contact-line">
+          <span class="fb-badge" aria-hidden="true">f</span>
+          <a
+            href="https://www.facebook.com/p/Zahradnictv%C3%AD-%C3%9Asiln%C3%A9-100059199107987/?locale=cs_CZ"
+            rel="noopener"
+          >Facebook</a>
+        </p>
+        <p class="contact-line">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect>
+            <circle cx="12" cy="12" r="3.8"></circle>
+            <circle class="dot" cx="17" cy="7" r="1.1"></circle>
+          </svg>
+          <a href="https://www.instagram.com/zahradnictviusilne/?hl=cs" rel="noopener">Instagram</a>
         </p>
       </div>
-      <div class="karta map-card">
+      <div class="map-wrap">
         <!-- Google Maps embed (keyless, free). `output=embed` renders the
              plain embeddable map; hl=cs keeps its UI in Czech. -->
         <iframe
@@ -74,16 +103,12 @@ const aktuality = (await getCollection('aktuality', ({ data }) => data.published
 
 <style>
   section + section {
-    margin-top: 2.5rem;
-  }
-
-  .section-content {
-    margin-top: 1.25rem;
+    margin-top: 2rem; /* spec §1.3: ~32px between sections */
   }
 
   .aktuality-list {
     display: grid;
-    gap: 1rem;
+    gap: 0.9rem; /* spec §1.3: ~14px between cards */
   }
 
   /* --- Otevírací doba --- */
@@ -98,8 +123,9 @@ const aktuality = (await getCollection('aktuality', ({ data }) => data.published
     font-size: 0.94rem;
   }
 
+  /* Hairline row separators (spec §2.5: muted at 20%, none on the last row). */
   tr + tr {
-    border-top: 1px solid var(--pozadi);
+    border-top: 1px solid color-mix(in srgb, var(--tlumena) 20%, transparent);
   }
 
   th {
@@ -111,13 +137,14 @@ const aktuality = (await getCollection('aktuality', ({ data }) => data.published
   td {
     padding: 0.6rem 0;
     text-align: right;
-    font-family: var(--pismo-nadpisy);
-    font-weight: 600;
-    color: var(--les);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums; /* digits share one width, so times align */
+    color: var(--inkoust);
   }
 
   td.closed {
-    color: var(--zavreno);
+    color: var(--tlumena); /* spec §2.5: quiet, not alarming red */
+    font-weight: 600;
   }
 
   .hours-note {
@@ -126,50 +153,85 @@ const aktuality = (await getCollection('aktuality', ({ data }) => data.published
     color: var(--tlumena);
   }
 
-  /* --- Kontakt --- */
-  .contact-grid {
+  /* --- Kontakt: one card with contact lines + map (spec §2.6) --- */
+  .contact-card {
+    padding: 1.25rem;
     display: grid;
     gap: 1rem;
   }
 
-  /* Contact card and map side by side once there's room (desktop). */
+  /* Lines and map side by side once there's room (desktop). */
   @media (min-width: 44rem) {
-    .contact-grid {
+    .contact-card {
       grid-template-columns: 1fr 1fr;
+      align-items: stretch;
     }
   }
 
-  .contact-card {
-    padding: 1.25rem;
-    font-size: 0.94rem;
-    line-height: 1.7;
-  }
-
-  .contact-card p {
+  .contact-line {
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px; /* comfortable touch target on phones (spec §4) */
+    font-size: 0.94rem;
   }
 
-  /* More specific than `.contact-card p` above, so this margin wins. */
-  .contact-card .contact-links {
-    margin-top: 0.9rem;
-    line-height: 2.1;
+  .muted {
+    color: var(--tlumena);
+    font-size: 0.85rem;
   }
 
-  .contact-links a {
+  .contact-line a {
+    color: var(--odkaz);
     font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
-  .map-card {
-    /* Clip the iframe to the card's rounded corners. */
+  .icon {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: var(--novinka);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .icon .dot {
+    fill: var(--novinka);
+    stroke: none;
+  }
+
+  .fb-badge {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: var(--novinka);
+    color: #fff;
+    font-family: var(--pismo-nadpisy);
+    font-weight: 700;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-wrap {
+    /* Nested surface inside the card: smaller radius than the card itself. */
+    border-radius: var(--radius-vnoreny);
     overflow: hidden;
-    min-height: 15rem;
+    min-height: 10rem;
     display: grid;
   }
 
   iframe {
     width: 100%;
     height: 100%;
-    min-height: 15rem;
+    min-height: 10rem;
     border: 0;
   }
 </style>

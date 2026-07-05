@@ -59,7 +59,7 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
   }
 
   .accent-bar {
-    height: 4px;
+    height: 6px;
     background: var(--akcent);
   }
 
@@ -79,32 +79,35 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
     display: inline-block;
     padding: 0.2rem 0.65rem;
     border-radius: 999px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     /* Tint the accent for the pill: light wash behind, darkened ink on top.
        color-mix keeps both derived from the one --akcent token, so the pill
-       always matches its accent bar (and stays WCAG-readable). */
-    background: color-mix(in srgb, var(--akcent) 14%, white);
+       always matches its accent bar (and stays WCAG-readable). Spec §1.1:
+       pill background = accent at ~13% over card white, mixed in oklab. */
+    background: color-mix(in oklab, var(--akcent) 13%, white);
     color: color-mix(in srgb, var(--akcent) 60%, var(--inkoust));
   }
 
   time {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 400;
     color: var(--tlumena);
   }
 
   h3 {
     margin: 0.5rem 0 0;
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--inkoust); /* card titles are ink, not forest green (spec §1.2) */
   }
 
   .text {
     font-size: 0.94rem;
-    line-height: 1.6;
+    line-height: 1.55;
+    color: var(--tlumena); /* card body copy is the muted tone (spec §1.2) */
   }
 
   .text :global(p) {
