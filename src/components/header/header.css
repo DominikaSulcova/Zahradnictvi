@@ -111,32 +111,26 @@
   transition: background 0.15s;
 }
 
-/* All five links in one row down to small phones: shrink type, not layout.
- * Vertical padding grows as the type shrinks so the tap area stays ≥44px
- * (older visitors on phones are the primary audience). */
+/* Narrow screens: the row keeps its readable size and OVERFLOWS instead —
+ * swipe it sideways like the photo carousel (owner decision, 2026-07-05:
+ * better a scrollable row than tiny text and an oversized active pill). */
 @media (max-width: 44rem) {
   .strip-nav {
-    justify-content: space-between;
-    gap: 0;
+    /* flex-start, not center: a centered flex row that overflows clips its
+       first item with no way to scroll back to it. */
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 0.1rem;
+    scrollbar-width: none;
   }
-  .nav-link {
-    font-size: 0.8rem;
-    padding: 0.9rem 0.45rem;
-  }
-}
 
-@media (max-width: 26rem) {
-  .nav-link {
-    font-size: 0.68rem;
-    padding: 0.95rem 0.3rem;
+  .strip-nav::-webkit-scrollbar {
+    display: none;
   }
-}
 
-/* Smallest phones (~320px): one last size step so the row never overflows. */
-@media (max-width: 21rem) {
   .nav-link {
-    font-size: 0.62rem;
-    padding: 1rem 0.2rem;
+    font-size: 0.85rem;
+    padding: 0.7rem 0.6rem;
   }
 }
 

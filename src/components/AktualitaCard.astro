@@ -35,11 +35,13 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
     <div class="card-text">
       <div class="meta-row">
         <span class="pill">{LABELS[entry.data.style]}</span>
-        {/* Without photos the date stays up here; with photos it moves into
-            the photo column (owner's layout, 2026-07-05). */}
-        {photos.length === 0 && (
-          <time datetime={entry.data.date.toISOString().slice(0, 10)}>{datum}</time>
-        )}
+        {/* The date renders here AND in the photo column; CSS shows exactly
+            one — this one on phones (stacked layout) and on photo-less cards,
+            the photo-column one on wider screens. */}
+        <time
+          class:list={[{ 'datum-mobil': photos.length > 0 }]}
+          datetime={entry.data.date.toISOString().slice(0, 10)}
+        >{datum}</time>
       </div>
       <h3>{entry.data.title}</h3>
       <div class="text">
@@ -98,13 +100,31 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
     padding: 1.25rem 1.25rem 2.5rem;
   }
 
-  /* With photos, the body splits into text | photo column (owner: photo
-     column ≈ 45% of the card, both columns top-aligned). */
+  /* With photos: on phones the photo stacks UNDER the text at full card
+     width; from 30rem up it sits beside the text (owner: photo column ≈45%,
+     both columns top-aligned). */
   .card-body.has-photos {
     display: grid;
-    grid-template-columns: 1fr 45%;
     gap: 1rem;
     align-items: start;
+  }
+
+  @media (min-width: 30rem) {
+    .card-body.has-photos {
+      grid-template-columns: 1fr 45%;
+    }
+
+    /* Wide layout: the photo-column date takes over. */
+    .meta-row .datum-mobil {
+      display: none;
+    }
+  }
+
+  @media (max-width: 29.99rem) {
+    /* Stacked layout: the top-row date takes over. */
+    .photo-box time {
+      display: none;
+    }
   }
 
   /* Photo column: date on top (right corner of the card), photo below. */
