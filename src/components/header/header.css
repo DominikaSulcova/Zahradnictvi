@@ -83,25 +83,25 @@
 }
 
 .strip-nav {
-  position: relative; /* keeps links above the SVG */
+  position: relative; /* keeps links above the SVG; lets the strip grow when links wrap */
   min-height: var(--vyska-nav);
   max-width: 56rem; /* same content column as .container */
   margin-inline: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Spec §4: the nav never wraps — on narrow screens the font shrinks
-     instead (media steps below). */
-  flex-wrap: nowrap;
+  /* Owner decision (2026-07-05, supersedes spec §4 no-wrap): on narrow
+     screens the links wrap into two centered rows at a readable size. */
+  flex-wrap: wrap;
   gap: 0.25rem;
   padding: 0.4rem 0.5rem;
 }
 
 .nav-link {
-  font-family: var(--pismo-text);
+  font-family: var(--pismo-nadpisy); /* Sora — owner preference over the spec's Manrope */
   font-weight: 600;
   font-size: 0.95rem;
-  white-space: nowrap;
+  white-space: nowrap; /* wrap BETWEEN links, never inside a label */
   color: var(--nav-svetla);
   /* Light text sits directly on the meadow; the shadow keeps it legible. */
   text-shadow: var(--stin-text-nav);
@@ -111,26 +111,10 @@
   transition: background 0.15s;
 }
 
-/* Narrow screens: the row keeps its readable size and OVERFLOWS instead —
- * swipe it sideways like the photo carousel (owner decision, 2026-07-05:
- * better a scrollable row than tiny text and an oversized active pill). */
 @media (max-width: 44rem) {
-  .strip-nav {
-    /* flex-start, not center: a centered flex row that overflows clips its
-       first item with no way to scroll back to it. */
-    justify-content: flex-start;
-    overflow-x: auto;
-    gap: 0.1rem;
-    scrollbar-width: none;
-  }
-
-  .strip-nav::-webkit-scrollbar {
-    display: none;
-  }
-
   .nav-link {
     font-size: 0.85rem;
-    padding: 0.7rem 0.6rem;
+    padding: 0.55rem 0.6rem;
   }
 }
 
