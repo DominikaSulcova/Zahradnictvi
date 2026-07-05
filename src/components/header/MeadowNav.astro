@@ -21,17 +21,21 @@ const activeByPath: Record<string, string> = {
 const activeLabel = activeByPath[path] ?? '';
 
 // Flowers along the strip, as data (x, color, sway delay, scale).
+// Spec §2.2: the meadow pattern uses only sun-yellow and white flowers;
+// each gets a center dot in the other color so both stay visible.
+const slunce = '#f0c04c';
+const bila = '#ffffff';
 const flowers = [
-  { x: 70, y: 54, color: '#d98ca6', delay: 0, s: 0.85 },
-  { x: 140, y: 56, color: '#e9d26a', delay: 1.2, s: 0.7 },
-  { x: 250, y: 54, color: '#b48ecb', delay: 0.6, s: 0.8 },
-  { x: 360, y: 56, color: '#e6eef0', delay: 2.1, s: 0.7 },
-  { x: 455, y: 54, color: '#d98ca6', delay: 1.6, s: 0.8 },
-  { x: 740, y: 54, color: '#e9d26a', delay: 0.4, s: 0.8 },
-  { x: 845, y: 56, color: '#b48ecb', delay: 2.4, s: 0.7 },
-  { x: 955, y: 54, color: '#d98ca6', delay: 1.0, s: 0.8 },
-  { x: 1065, y: 56, color: '#e6eef0', delay: 0.2, s: 0.7 },
-  { x: 1140, y: 54, color: '#e9d26a', delay: 1.8, s: 0.8 },
+  { x: 70, y: 54, color: slunce, delay: 0, s: 0.85 },
+  { x: 140, y: 56, color: bila, delay: 1.2, s: 0.7 },
+  { x: 250, y: 54, color: slunce, delay: 0.6, s: 0.8 },
+  { x: 360, y: 56, color: bila, delay: 2.1, s: 0.7 },
+  { x: 455, y: 54, color: slunce, delay: 1.6, s: 0.8 },
+  { x: 740, y: 54, color: bila, delay: 0.4, s: 0.8 },
+  { x: 845, y: 56, color: slunce, delay: 2.4, s: 0.7 },
+  { x: 955, y: 54, color: bila, delay: 1.0, s: 0.8 },
+  { x: 1065, y: 56, color: slunce, delay: 0.2, s: 0.7 },
+  { x: 1140, y: 54, color: bila, delay: 1.8, s: 0.8 },
 ];
 ---
 
@@ -47,7 +51,7 @@ const flowers = [
       <g class="anim-flower" style={`animation-delay: ${delay}s`} transform={`translate(${x} ${y}) scale(${s})`}>
         <line x1="0" y1="0" x2="0" y2="-16" stroke="#3f6a44" stroke-width="1.6"></line>
         <circle cx="0" cy="-19" r="4.5" fill={color}></circle>
-        <circle cx="0" cy="-19" r="1.7" fill="#f6e8b8"></circle>
+        <circle cx="0" cy="-19" r="1.7" fill={color === bila ? slunce : bila}></circle>
       </g>
     ))}
 

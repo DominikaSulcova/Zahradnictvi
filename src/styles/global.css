@@ -48,14 +48,6 @@ section[id] {
   scroll-margin-top: calc(var(--vyska-nav) + 1rem);
 }
 
-/* On narrow phones the five nav links wrap to two rows, so the pinned strip
- * is roughly twice as tall — anchors need the extra headroom. */
-@media (max-width: 35rem) {
-  section[id] {
-    scroll-margin-top: calc(2.2 * var(--vyska-nav) + 1rem);
-  }
-}
-
 /* Visible keyboard focus everywhere (accessibility quality floor). */
 :focus-visible {
   outline: 3px solid var(--les);
