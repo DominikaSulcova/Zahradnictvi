@@ -165,9 +165,16 @@ The prototype (`zahradnictvi-usilne-prototyp.jsx`) is authoritative for structur
 the tokens above override its colors and fonts. Components below are the agreed set.
 
 ### Aktualita Card (signature component)
-- **Structure:** thin accent bar across the top (style color), style pill + date row,
-  headline in les, short body text, optional photo strip.
-- **Corner Style:** 16px radius, soft shadow, no border.
+- **Structure:** thin accent bar across the top (style color), then text column
+  (pill, headline in inkoust, short body text) with an optional photo column on the
+  right (≈45% of the card). With photos, the date moves to the photo column's top
+  right corner; without photos it stays next to the pill.
+- **Photos (owner's design, 2026-07-05 — supersedes the spec §2.4 thumbnail row):**
+  a scroll-snap strip showing one photo at a time, framed as a **polaroid** — white
+  border, thick bottom lip, soft shadow, square corners. *Provisional:* the owner may
+  still revisit the polaroid treatment; the 8px nested-surface radius remains the
+  fallback style for card photos if she does.
+- **Corner Style (card):** 16px radius, soft shadow, no border.
 - **The style (novinka/výprodej/sezónní) controls pill color and accent bar** — exactly
   as in the prototype, driven by one CMS select field.
 

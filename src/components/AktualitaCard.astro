@@ -1,15 +1,18 @@
 ---
-// One news card: accent bar on top, style pill + date row, title, short text.
-// The entry's `style` field (novinka / vyprodej / sezonni) is the only
-// appearance choice the editor gets (DESIGN.md: The Three Styles Rule).
+// One news card: accent bar on top, style pill + date row, title, short text,
+// and (optionally) photos in a right-hand column — a CSS scroll-snap strip
+// showing one photo at a time. The entry's `style` field (novinka / vyprodej /
+// sezonni) is the only appearance choice the editor gets (The Three Styles Rule).
 import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 
 interface Props {
   entry: CollectionEntry<'aktuality'>;
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const photos = entry.data.photos;
 
 const LABELS = {
   novinka: 'Novinka',
@@ -28,15 +31,37 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
 
 <article class:list={['karta', `aktualita--${entry.data.style}`]}>
   <div class="accent-bar"></div>
-  <div class="card-body">
-    <div class="meta-row">
-      <span class="pill">{LABELS[entry.data.style]}</span>
-      <time datetime={entry.data.date.toISOString().slice(0, 10)}>{datum}</time>
+  <div class:list={['card-body', { 'has-photos': photos.length > 0 }]}>
+    <div class="card-text">
+      <div class="meta-row">
+        <span class="pill">{LABELS[entry.data.style]}</span>
+        {/* Without photos the date stays up here; with photos it moves into
+            the photo column (owner's layout, 2026-07-05). */}
+        {photos.length === 0 && (
+          <time datetime={entry.data.date.toISOString().slice(0, 10)}>{datum}</time>
+        )}
+      </div>
+      <h3>{entry.data.title}</h3>
+      <div class="text">
+        <Content />
+      </div>
     </div>
-    <h3>{entry.data.title}</h3>
-    <div class="text">
-      <Content />
-    </div>
+
+    {photos.length > 0 && (
+      <div class="photo-box">
+        <time datetime={entry.data.date.toISOString().slice(0, 10)}>{datum}</time>
+        <!-- The polaroid frame wraps the scroll strip: photos slide INSIDE the
+             frame, the white border and shadow stay put.
+             width = 2× the displayed column width, for crisp high-DPI screens;
+             Astro generates the resized, compressed file at build time.
+             alt="" until entries carry captions (CMS milestone). -->
+        <div class="polaroid">
+          <div class="photo-track">
+            {photos.map((photo) => <Image class="photo" src={photo} width={640} alt="" />)}
+          </div>
+        </div>
+      </div>
+    )}
   </div>
 </article>
 
@@ -64,7 +89,57 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
   }
 
   .card-body {
-    padding: 1.25rem;
+    padding: 1.25rem 1.25rem 2.5rem;
+  }
+
+  /* With photos, the body splits into text | photo column (owner: photo
+     column ≈ 45% of the card, both columns top-aligned). */
+  .card-body.has-photos {
+    display: grid;
+    grid-template-columns: 1fr 45%;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  /* Photo column: date on top (right corner of the card), photo below. */
+  .photo-box {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .photo-box time {
+    text-align: right;
+  }
+
+  /* Polaroid frame: thin white border, classic thick bottom, soft shadow.
+     The white frame reads against the white card thanks to the shadow. */
+  .polaroid {
+    margin: 0.4rem 1rem 0; /* owner-tuned breathing room in the photo column */
+    padding: 0.45rem 0.45rem 1.5rem; /* thick bottom = the polaroid signature */
+    background: var(--karta);
+    box-shadow: 0 2px 10px rgba(45, 60, 50, 0.25);
+  }
+
+  /* The photo strip: a horizontal scroll-snap carousel, no JS needed.
+     Each photo fills the column, so scrolling always lands on one photo. */
+  .photo-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* Hide the scrollbar — swiping and (soon) arrows are the controls. */
+    scrollbar-width: none;
+  }
+
+  .photo-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo {
+    flex: none;
+    width: 100%;
+    height: 14rem; /* ← precise photo height, owner-tunable */
+    object-fit: cover; /* fill the box by cropping, never by squashing */
+    scroll-snap-align: start;
   }
 
   .meta-row {
@@ -73,6 +148,7 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
     justify-content: space-between;
     gap: 0.75rem;
     flex-wrap: wrap;
+    margin-top: -0.3rem;   /* ← add this: negative margin pulls the row up */
   }
 
   .pill {
@@ -98,7 +174,7 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
   }
 
   h3 {
-    margin: 0.5rem 0 0;
+    margin: 0.8rem 0 0;
     font-size: 1.05rem;
     font-weight: 700;
     color: var(--inkoust); /* card titles are ink, not forest green (spec §1.2) */
