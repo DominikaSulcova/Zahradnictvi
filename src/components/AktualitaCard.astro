@@ -248,8 +248,19 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
 
     // One step = the strip's visible width = exactly one photo;
     // the scroll-snap CSS then settles the strip onto the nearest photo.
-    const step = (direction: number) =>
-      track.scrollBy({ left: direction * track.clientWidth, behavior });
+    // The carousel loops: past the last photo it returns to the first,
+    // and before the first it jumps to the last. (The 2px tolerance is
+    // because scroll positions can be fractions of a pixel.)
+    const step = (direction: number) => {
+      const max = track.scrollWidth - track.clientWidth;
+      if (direction > 0 && track.scrollLeft >= max - 2) {
+        track.scrollTo({ left: 0, behavior });
+      } else if (direction < 0 && track.scrollLeft <= 2) {
+        track.scrollTo({ left: max, behavior });
+      } else {
+        track.scrollBy({ left: direction * track.clientWidth, behavior });
+      }
+    };
 
     box.querySelector('.arrow-prev')?.addEventListener('click', () => step(-1));
     box.querySelector('.arrow-next')?.addEventListener('click', () => step(1));
