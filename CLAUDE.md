@@ -70,11 +70,14 @@ Teaching rules:
 - [x] Milestone 2: home page with real content — aktuality content collection
       (3 seed entries), otevírací doba card, kontakt + Google Maps embed;
       SectionTitle + AktualitaCard components, shared `.karta` surface.
-      Open: Facebook URL in the contact card (owner adds it — TODO in
-      index.astro); prototype watch-items to confirm: eyebrow labels on every
-      section, identical Sortiment card grid.
+- [x] Design update "6a" (design-update.md, 2026-07-05): fonts Sora/Caveat/Manrope;
+      uppercase section headings + handwritten sub-headings + PlantIcon; spec
+      illustration palette; kontakt card with icons + Facebook/Instagram links
+      (former FB TODO resolved); no-wrap nav. Deviations (contrast, owner-approved):
+      `--louka` stays #4d7549; text-emerald darkened to `--odkaz` #17854a.
+      Watch-item for M3: Sortiment card grid per spec §4 (single column, locked).
 - [ ] Milestone 3: O nás + Sortiment pages.
-- Supporting tokens: `--louka`/`--louka-tmava` confirmed by the owner (darkened for
-  WCAG nav contrast, 2026-07-04); `--inkoust`, `--tlumena`, `--zavreno`,
-  `--les-tlumeny` still proposed.
+- Supporting tokens all confirmed via design-update.md (`--inkoust` #24382a,
+  `--tlumena` #64796a, new `--odkaz`, `--slunce`); `--zavreno` removed (spec:
+  "zavřeno" is muted, not red); `--les-tlumeny` kept for the header tagline.
 - Keep this section updated as milestones complete.
