@@ -53,8 +53,8 @@ section[id] {
 
 /* On narrower screens the nav links wrap to two rows, so the pinned strip
  * is roughly twice as tall — anchors need the extra headroom. (Threshold
- * grew with the nav: six items wrap earlier than five did.) */
-@media (max-width: 48rem) {
+ * grew with the nav: seven items wrap earlier than five did.) */
+@media (max-width: 52rem) {
   section[id] {
     scroll-margin-top: calc(2.2 * var(--vyska-nav) + 1rem);
   }

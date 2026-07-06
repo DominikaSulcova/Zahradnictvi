@@ -7,15 +7,21 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import AktualitaCard from '../components/AktualitaCard.astro';
+import PolaroidCarousel from '../components/PolaroidCarousel.astro';
 
 // Only published entries, newest first.
 const aktuality = (await getCollection('aktuality', ({ data }) => data.published))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-// Parking section content (editable file, CMS-ready like the other stranky).
+// Parking + voucher section content (editable files, CMS-ready like the
+// other stranky).
 const parkovani = await getEntry('stranky', 'parkovani');
 if (!parkovani) throw new Error('Missing content file: src/content/stranky/parkovani.md');
 const { Content: ParkovaniContent } = await render(parkovani);
+
+const poukazy = await getEntry('stranky', 'poukazy');
+if (!poukazy) throw new Error('Missing content file: src/content/stranky/poukazy.md');
+const { Content: PoukazyContent } = await render(poukazy);
 ---
 
 <BaseLayout>
@@ -126,6 +132,29 @@ const { Content: ParkovaniContent } = await render(parkovani);
             <figcaption class="popisek">{popisek}</figcaption>
           </figure>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="poukazy">
+    <SectionTitle plant="gift" subtitle="dárek, který poroste">Poukazy</SectionTitle>
+    <div class="karta poukazy-card">
+      <div class="parkovani-text">
+        <PoukazyContent />
+      </div>
+      <!-- Two presentations of the same photos, toggled by a media query
+           (the same trick as the card date): side-by-side "thrown on the
+           table" polaroids on wide screens, the carousel on phones. -->
+      <div class="poukazy-vedle">
+        {poukazy.data.photos.map(({ foto, popisek }) => (
+          <figure class="polaroid nahozeny">
+            <Image class="poukaz-foto" src={foto} width={900} alt="" />
+            <figcaption class="popisek">{popisek}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <div class="poukazy-karusel">
+        <PolaroidCarousel photos={poukazy.data.photos} variant="natural" width={900} />
       </div>
     </div>
   </section>
@@ -257,8 +286,9 @@ const { Content: ParkovaniContent } = await render(parkovani);
     display: grid;
   }
 
-  /* --- Parkování --- */
-  .parkovani-card {
+  /* --- Parkování + Poukazy --- */
+  .parkovani-card,
+  .poukazy-card {
     padding: 1.25rem;
   }
 
@@ -284,6 +314,55 @@ const { Content: ParkovaniContent } = await render(parkovani);
     display: block;
     max-width: 100%;
     height: auto; /* maps keep their own proportions, never cropped */
+  }
+
+  /* Wide screens: the two voucher polaroids sit next to each other, each
+     tilted a touch the other way — casually "thrown on the table". */
+  .poukazy-vedle {
+    margin-top: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.2rem;
+  }
+
+  .poukazy-vedle .polaroid {
+    max-width: calc(50% - 1.1rem); /* half the row minus its share of the gap */
+  }
+
+  .poukazy-vedle .polaroid:first-child {
+    transform: rotate(-2.2deg);
+  }
+
+  .poukazy-vedle .polaroid:last-child {
+    transform: rotate(1.8deg);
+    margin-top: 0.9rem; /* slightly lower — thrown, not aligned */
+  }
+
+  .poukaz-foto {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 24rem; /* portrait vouchers stay a hand's height */
+  }
+
+  /* Phones: the side-by-side pair hides and the carousel takes over
+     (both are in the HTML; the media query shows exactly one). */
+  .poukazy-karusel {
+    display: none;
+    margin-top: 1rem;
+    --max-vyska-foto: clamp(16rem, 80vw, 22rem);
+  }
+
+  @media (max-width: 44rem) {
+    .poukazy-vedle {
+      display: none;
+    }
+
+    .poukazy-karusel {
+      display: block;
+    }
   }
 
   iframe {

@@ -3,9 +3,10 @@
 // All share the terracotta pot and green stem; only the flower differs:
 // tulip (Aktuality), daisy (Otevírací doba), blossom branch (Kontakt),
 // sunflower (O nás), sprout (Sortiment), parking sign (Parkování — the
-// owner's favourite joke: it grows in a pot like everything else here).
+// owner's favourite joke: it grows in a pot like everything else here),
+// gift box (Poukazy).
 interface Props {
-  plant: 'tulip' | 'daisy' | 'blossom' | 'sunflower' | 'sprout' | 'parking';
+  plant: 'tulip' | 'daisy' | 'blossom' | 'sunflower' | 'sprout' | 'parking' | 'gift';
 }
 const { plant } = Astro.props;
 ---
@@ -79,6 +80,19 @@ const { plant } = Astro.props;
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
+    </>
+  )}
+
+  {plant === 'gift' && (
+    <>
+      <path class="stem" d="M19 31 V16"></path>
+      <path d="M19 26 C15 24.5 13.5 21 14 18 C17 19.5 19 22 19 26 Z" fill="var(--novinka)"></path>
+      {/* a little present blooming on the stem: sale-red box, sun-yellow ribbon */}
+      <rect x="13.5" y="7" width="11" height="9" rx="1.5" fill="var(--vyprodej)"></rect>
+      <rect x="12.8" y="5.5" width="12.4" height="2.8" rx="1.2" fill="var(--vyprodej)"></rect>
+      <rect x="18" y="5.5" width="2" height="10.5" fill="var(--slunce)"></rect>
+      <circle cx="17" cy="4.2" r="1.6" fill="var(--slunce)"></circle>
+      <circle cx="21" cy="4.2" r="1.6" fill="var(--slunce)"></circle>
     </>
   )}
 

@@ -83,8 +83,10 @@ Teaching rules:
       owner choice over the prototype grid); SectionTitle `level` prop,
       sunflower + sprout PlantIcons. O nás text + 3 gallery photos delivered
       by the owner (2026-07-06); Sortiment categories to expand with her mum.
-- [ ] New home sections "Parkování" + "Poukazy" (heading pattern + text +
-      pictures, nav anchors before O nás) — owner supplies content, then build.
+- [x] Home sections "Parkování" (text + two always-visible polaroid-framed
+      maps) + "Poukazy" (text + two tilted side-by-side polaroids on wide
+      screens, carousel on phones); nav grew to 7 items; polaroid frame
+      extracted to global .polaroid/.popisek; parking-sign + gift PlantIcons.
 - [ ] Milestone 4: Sveltia CMS + OAuth worker (/admin editor workflow).
 - Supporting tokens all confirmed via design-update.md (`--inkoust` #24382a,
   `--tlumena` #64796a, new `--odkaz`, `--slunce`); `--zavreno` removed (spec:
