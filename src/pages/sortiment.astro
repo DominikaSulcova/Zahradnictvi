@@ -1,12 +1,67 @@
 ---
-// "Sortiment" page. Milestone 3 renders the category list from the CMS
-// singleton (icon/emoji, name, short description).
+// "Sortiment" page: category list from src/data/sortiment.json (owner's
+// layout decision 2026-07-06: one card with hairline-separated rows, like
+// the hours table — NOT the prototype's card grid). The emoji is content
+// the editor picks per category (M4 CMS), not UI chrome.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import sortiment from '../data/sortiment.json';
 ---
 
-<BaseLayout title="Sortiment — Zahradnictví Úsilné">
+<BaseLayout
+  title="Sortiment — Zahradnictví Úsilné"
+  description="Co u nás najdete: sadba zeleniny, balkónové květiny, bylinky, trvalky, vánoční stromky i substráty."
+>
   <section>
-    <h1>Sortiment</h1>
-    <p>Připravujeme — přehled toho, co u nás najdete.</p>
+    <SectionTitle level={1} plant="sprout" subtitle="co u nás najdete">Sortiment</SectionTitle>
+    <ul class="karta seznam">
+      {sortiment.kategorie.map(({ emoji, nazev, popis }) => (
+        <li class="radek">
+          <span class="emoji" aria-hidden="true">{emoji}</span>
+          <div>
+            <p class="nazev">{nazev}</p>
+            <p class="popis">{popis}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   </section>
 </BaseLayout>
+
+<style>
+  .seznam {
+    margin: 0;
+    padding: 0.4rem 1.25rem;
+    list-style: none;
+  }
+
+  .radek {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 0;
+  }
+
+  /* Same hairline as the hours table (spec §2.5). */
+  .radek + .radek {
+    border-top: 1px solid color-mix(in srgb, var(--tlumena) 20%, transparent);
+  }
+
+  .emoji {
+    flex: none;
+    font-size: 1.5rem;
+  }
+
+  .nazev {
+    margin: 0;
+    font-family: var(--pismo-nadpisy);
+    font-weight: 600;
+    color: var(--les);
+  }
+
+  .popis {
+    margin: 0.1rem 0 0;
+    font-size: 0.9rem;
+    color: var(--tlumena);
+  }
+</style>
