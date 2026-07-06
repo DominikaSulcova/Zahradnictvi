@@ -175,8 +175,10 @@ the tokens above override its colors and fonts. Components below are the agreed 
   border, thick bottom lip, soft shadow, square corners. *Provisional:* the owner may
   still revisit the polaroid treatment; the 8px nested-surface radius remains the
   fallback style for card photos if she does. The frame + strip + arrows live in
-  `PolaroidCarousel.astro`, shared with the O nás gallery (one large polaroid
-  under the story text — owner decision 2026-07-06, replaces the photo grid).
+  `PolaroidCarousel.astro` in two variants: **crop** (cards — fixed window,
+  photos fill it) and **natural** (O nás gallery — each photo keeps its own
+  proportions, frame shrink-wraps it, arrows outside in side gutters; landscape
+  spans almost the full column, portrait capped by `--max-vyska-foto`).
 - **Corner Style (card):** 16px radius, soft shadow, no border.
 - **The style (novinka/výprodej/sezónní) controls pill color and accent bar** — exactly
   as in the prototype, driven by one CMS select field.

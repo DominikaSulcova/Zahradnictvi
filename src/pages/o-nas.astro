@@ -23,9 +23,9 @@ const { Content } = await render(onas);
       </div>
       {onas.data.photos.length > 0 && (
         <div class="galerie">
-          <!-- One big polaroid at the end of the story; the shared carousel
-               component (PolaroidCarousel.astro) does frame, swipe and arrows. -->
-          <PolaroidCarousel photos={onas.data.photos} width={1400} />
+          <!-- One big polaroid at the end of the story; the "natural" variant
+               lets every photo keep its own shape (PolaroidCarousel.astro). -->
+          <PolaroidCarousel photos={onas.data.photos} variant="natural" width={1400} />
         </div>
       )}
     </div>
@@ -62,10 +62,11 @@ const { Content } = await render(onas);
     margin-top: 0;
   }
 
-  /* One large polaroid under the text. clamp() keeps the photo tall on
-     desktop without eating the whole screen on phones. */
+  /* One large polaroid under the text; each photo keeps its own proportions.
+     --max-vyska-foto caps how tall a portrait photo may get (owner-tunable);
+     landscape photos are capped by the column width instead. */
   .galerie {
     margin-top: 1.4rem;
-    --vyska-foto: clamp(12rem, 45vw, 24rem);
+    --max-vyska-foto: clamp(15rem, 55vw, 24rem);
   }
 </style>

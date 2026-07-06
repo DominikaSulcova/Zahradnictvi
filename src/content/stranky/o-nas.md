@@ -7,7 +7,7 @@ photos:
 
 ## Kde to všechno začalo
 
-Koncem devadesátých let naše rodina opravila starý úsilenský statek — s představou,
+Koncem devadesátých let naše rodina opravila starý statek v Úsilném — s představou,
 že si na zahradě vypěstuje vlastní zeleninu a květiny. K tomu patřil skleník. A ten
 skleník nám vzápětí nadělil víc sadby a víc květin, než kolik jsme kdy dokázali sami
 zasadit.
@@ -28,7 +28,7 @@ kam se chodí i pro radu, ne jen pro kytku.
 
 ## Co u nás roste a co vozíme
 
-Část sortimentu pěstujeme sami ve vlastních sklenících. Zbytek s péčí vybíráme od
+Část sortimentu pěstujeme sami ve vlastních sklenících, například macešky. Zbytek s péčí vybíráme od
 pěstitelů, kterým důvěřujeme — a dáváme přednost českým dodavatelům, kdykoli to jde.
 Nepředstíráme, že všechno pochází z naší zahrady; raději ručíme za to, že za každou
 rostlinou, kterou u nás koupíte, stojí někdo, komu na ní záleželo.
