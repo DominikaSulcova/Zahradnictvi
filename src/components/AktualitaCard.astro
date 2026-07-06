@@ -1,0 +1,180 @@
+---
+// One news card: accent bar on top, style pill + date row, title, short text,
+// and (optionally) photos in a right-hand column — a CSS scroll-snap strip
+// showing one photo at a time. The entry's `style` field (novinka / vyprodej /
+// sezonni) is the only appearance choice the editor gets (The Three Styles Rule).
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import PolaroidCarousel from './PolaroidCarousel.astro';
+
+interface Props {
+  entry: CollectionEntry<'aktuality'>;
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const photos = entry.data.photos;
+
+const LABELS = {
+  novinka: 'Novinka',
+  vyprodej: 'Výprodej',
+  sezonni: 'Sezónní',
+};
+
+// "1. 7. 2026" — the Czech short date format, generated from the real Date
+// so entries never need a hand-formatted date string.
+const datum = new Intl.DateTimeFormat('cs-CZ', {
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+}).format(entry.data.date);
+---
+
+<article class:list={['karta', `aktualita--${entry.data.style}`]}>
+  <div class="accent-bar"></div>
+  <div class:list={['card-body', { 'has-photos': photos.length > 0 }]}>
+    <div class="card-text">
+      <div class="meta-row">
+        <span class="pill">{LABELS[entry.data.style]}</span>
+        {/* The date renders here AND in the photo column; CSS shows exactly
+            one — this one on phones (stacked layout) and on photo-less cards,
+            the photo-column one on wider screens. */}
+        <time
+          class:list={[{ 'datum-mobil': photos.length > 0 }]}
+          datetime={entry.data.date.toISOString().slice(0, 10)}
+        >{datum}</time>
+      </div>
+      <h3>{entry.data.title}</h3>
+      <div class="text">
+        <Content />
+      </div>
+    </div>
+
+    {photos.length > 0 && (
+      <div class="photo-box">
+        <time datetime={entry.data.date.toISOString().slice(0, 10)}>{datum}</time>
+        <!-- Shared polaroid carousel (see PolaroidCarousel.astro for the
+             whole frame + strip + arrows system). -->
+        <PolaroidCarousel photos={photos} />
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  /* Each style variant only sets --akcent; everything below reads it.
+     Adding a fourth style one day = one token + one line here. */
+  .aktualita--novinka {
+    --akcent: var(--novinka);
+  }
+  .aktualita--vyprodej {
+    --akcent: var(--vyprodej);
+  }
+  .aktualita--sezonni {
+    --akcent: var(--sezonni);
+  }
+
+  article {
+    /* Clip the accent bar to the card's rounded corners. */
+    overflow: hidden;
+  }
+
+  .accent-bar {
+    height: 6px;
+    background: var(--akcent);
+  }
+
+  .card-body {
+    padding: 1.25rem 1.25rem 2.5rem;
+  }
+
+  /* With photos: on phones the photo stacks UNDER the text at full card
+     width; from 30rem up it sits beside the text (owner: photo column ≈45%,
+     both columns top-aligned). */
+  .card-body.has-photos {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  @media (min-width: 30rem) {
+    .card-body.has-photos {
+      grid-template-columns: 1fr 45%;
+    }
+
+    /* Wide layout: the photo-column date takes over. */
+    .meta-row .datum-mobil {
+      display: none;
+    }
+  }
+
+  @media (max-width: 29.99rem) {
+    /* Stacked layout: the top-row date takes over. */
+    .photo-box time {
+      display: none;
+    }
+  }
+
+  /* Photo column: date on top (right corner of the card), photo below. */
+  .photo-box {
+    display: grid;
+    gap: 0.4rem;
+    --vyska-foto: 14rem; /* ← photo height in cards, owner-tunable */
+  }
+
+  .photo-box time {
+    text-align: right;
+  }
+
+  /* Owner-tuned breathing room around the carousel inside the column. */
+  .photo-box :global(.polaroid) {
+    margin: 0.4rem 1rem 0;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: -0.3rem;   /* ← add this: negative margin pulls the row up */
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    /* Tint the accent for the pill: light wash behind, darkened ink on top.
+       color-mix keeps both derived from the one --akcent token, so the pill
+       always matches its accent bar (and stays WCAG-readable). Spec §1.1:
+       pill background = accent at ~13% over card white, mixed in oklab. */
+    background: color-mix(in oklab, var(--akcent) 13%, white);
+    color: color-mix(in srgb, var(--akcent) 60%, var(--inkoust));
+  }
+
+  time {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--tlumena);
+  }
+
+  h3 {
+    margin: 0.8rem 0 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--inkoust); /* card titles are ink, not forest green (spec §1.2) */
+  }
+
+  .text {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--tlumena); /* card body copy is the muted tone (spec §1.2) */
+  }
+
+  .text :global(p) {
+    margin: 0.35rem 0 0;
+  }
+</style>

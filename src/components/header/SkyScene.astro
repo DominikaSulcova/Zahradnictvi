@@ -2,26 +2,15 @@
 // The illustrated sky scene: sun, clouds, birds, hills, farmhouse, trees.
 // Phase 1 placeholder — every group below will be replaced by a drawn layer
 // exported from Procreate (same structure, same animation classes).
-interface Props {
-  compact?: boolean; // subpages show a shorter header
-}
-const { compact = false } = Astro.props;
-
-// Trees are the same shape at different positions/sizes, so we describe them
-// as data and let the template repeat the markup for us.
-const trees = [
-  { x: 205, y: 236, s: 0.95, canopy: '#557f52' },
-  { x: 315, y: 244, s: 0.7, canopy: '#4c7a4f' },
-  { x: 905, y: 238, s: 1.0, canopy: '#557f52' },
-  { x: 1010, y: 246, s: 0.65, canopy: '#476f4a' },
-];
+// The scene is identical on every page (owner decision, 2026-07-04).
+// Colors follow the illustration palette in design-update.md §1.1.
 ---
 
-<div class:list={['sky-scene', { compact }]}>
+<div class="sky-scene">
   <svg viewBox="0 0 1200 290" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-    <!-- sun -->
-    <circle cx="150" cy="66" r="34" fill="#f5e6a8" opacity="0.9"></circle>
-    <circle cx="150" cy="66" r="48" fill="#f5e6a8" opacity="0.25"></circle>
+    <!-- sun, top-right (spec §2.1) -->
+    <circle cx="1045" cy="64" r="30" fill="#f0c04c"></circle>
+    <circle cx="1045" cy="64" r="44" fill="#f0c04c" opacity="0.25"></circle>
 
     <!-- drifting clouds -->
     <g class="anim-cloud-a" opacity="0.9">
@@ -35,38 +24,43 @@ const trees = [
 
     <!-- birds -->
     <g class="anim-bird-1">
-      <path d="M0 60 q6 -7 12 0 q6 -7 12 0" stroke="#3a4d3e" stroke-width="2.2" fill="none" stroke-linecap="round"></path>
+      <path d="M0 60 q6 -7 12 0 q6 -7 12 0" stroke="#2c5e37" stroke-width="2.2" fill="none" stroke-linecap="round"></path>
     </g>
     <g class="anim-bird-2">
-      <path d="M0 60 q6 -7 12 0 q6 -7 12 0" stroke="#3a4d3e" stroke-width="2.2" fill="none" stroke-linecap="round"></path>
+      <path d="M0 60 q6 -7 12 0 q6 -7 12 0" stroke="#2c5e37" stroke-width="2.2" fill="none" stroke-linecap="round"></path>
     </g>
 
-    <!-- far + near hills -->
-    <path d="M0 205 Q 200 158 420 196 T 820 190 T 1200 200 L 1200 290 L 0 290 Z" fill="#a8c49b"></path>
-    <path d="M0 240 Q 260 202 520 234 T 1200 230 L 1200 290 L 0 290 Z" fill="#7ba377"></path>
+    <!-- far + near hills (spec: hillA behind, hillB front) -->
+    <path d="M0 205 Q 200 158 420 196 T 820 190 T 1200 200 L 1200 290 L 0 290 Z" fill="#8cc07f"></path>
+    <path d="M0 240 Q 260 202 520 234 T 1200 230 L 1200 290 L 0 290 Z" fill="#63a25e"></path>
 
-    <!-- trees -->
-    {trees.map(({ x, y, s, canopy }) => (
-      <g transform={`translate(${x} ${y}) scale(${s})`}>
-        <rect x="-4" y="-8" width="8" height="26" rx="2" fill="#6e4f33"></rect>
-        <circle cx="0" cy="-30" r="26" fill={canopy}></circle>
-        <circle cx="-18" cy="-18" r="17" fill={canopy}></circle>
-        <circle cx="18" cy="-18" r="17" fill={canopy}></circle>
-      </g>
-    ))}
+    <!-- dark conifer, left (spec §2.1) -->
+    <g transform="translate(240 244)">
+      <rect x="-4" y="-4" width="8" height="16" rx="2" fill="#85603c"></rect>
+      <polygon points="0,-86 26,-30 -26,-30" fill="#2c5e37"></polygon>
+      <polygon points="0,-58 32,-4 -32,-4" fill="#2c5e37"></polygon>
+    </g>
 
-    <!-- farmhouse -->
+    <!-- round-crown tree, right -->
+    <g transform="translate(935 240)">
+      <rect x="-4" y="-8" width="8" height="26" rx="2" fill="#85603c"></rect>
+      <circle cx="0" cy="-32" r="24" fill="#2c5e37"></circle>
+      <circle cx="-17" cy="-19" r="16" fill="#2c5e37"></circle>
+      <circle cx="17" cy="-19" r="16" fill="#2c5e37"></circle>
+    </g>
+
+    <!-- farmhouse: cream wall, poppy-red roof + door, sky-tinted windows -->
     <g transform="translate(600 242)">
-      <rect x="-62" y="-52" width="124" height="52" rx="3" fill="#f2e7d0" stroke="#c9b28c" stroke-width="1.5"></rect>
-      <polygon points="-72,-52 72,-52 0,-102" fill="#8a5a38"></polygon>
-      <rect x="26" y="-96" width="13" height="26" fill="#6e4630"></rect>
-      <rect x="-12" y="-30" width="24" height="30" rx="2" fill="#6e4a30"></rect>
-      <rect x="-46" y="-40" width="18" height="16" rx="2" fill="#cfe3ea" stroke="#8a6a48" stroke-width="1.5"></rect>
-      <rect x="28" y="-40" width="18" height="16" rx="2" fill="#cfe3ea" stroke="#8a6a48" stroke-width="1.5"></rect>
+      <rect x="-62" y="-52" width="124" height="52" rx="3" fill="#fff6e6"></rect>
+      <polygon points="-72,-52 72,-52 0,-102" fill="#d9432f"></polygon>
+      <rect x="-12" y="-30" width="24" height="30" rx="2" fill="#d9432f"></rect>
+      <rect x="-46" y="-40" width="18" height="16" rx="2" fill="#cfe6f0"></rect>
+      <rect x="28" y="-40" width="18" height="16" rx="2" fill="#cfe6f0"></rect>
     </g>
 
-    <!-- thin meadow onset so the seam into the sticky strip reads naturally -->
-    <path d="M0 290 L0 272 Q 300 262 600 270 T 1200 268 L 1200 290 Z" fill="#5d8a58"></path>
+    <!-- thin meadow onset so the seam into the sticky strip reads naturally;
+         same token as the strip so the two always match -->
+    <path d="M0 290 L0 272 Q 300 262 600 270 T 1200 268 L 1200 290 Z" style="fill: var(--louka)"></path>
   </svg>
 
   <div class="sky-title">

@@ -1,0 +1,13 @@
+// Config for Wrangler, Cloudflare's deploy tool.
+// This project is a purely static site: no server code, just the files
+// Astro builds into dist/. Wrangler uploads that folder to Cloudflare's CDN.
+// Deploys happen automatically on git push (the "zahradnictvi" Worker is
+// connected to the GitHub repo); manual `npx wrangler deploy` is only the
+// emergency fallback and targets the same Worker.
+{
+  "name": "zahradnictvi",
+  "compatibility_date": "2026-07-04",
+  "assets": {
+    "directory": "./dist"
+  }
+}

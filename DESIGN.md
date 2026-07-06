@@ -9,21 +9,35 @@ colors:
   vyprodej: "#d9432f"
   sezonni: "#85603c"
   nav-svetla: "#f2f7ee"
+  inkoust: "#24382a"
+  tlumena: "#64796a"
+  odkaz: "#17854a"
+  slunce: "#f0c04c"
+  louka: "#4d7549"
+  louka-tmava: "#456b42"
+  nebe: "#cfe6f0"
+  kopec-zadni: "#8cc07f"
+  kopec-predni: "#63a25e"
+  stavení: "#fff6e6"
 typography:
   display:
-    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontFamily: "Sora, system-ui, sans-serif"
     fontWeight: 700
   headline:
-    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
+    fontFamily: "Sora, system-ui, sans-serif"
     fontWeight: 600
+  handwritten:
+    fontFamily: "Caveat, cursive"
+    fontWeight: 500
   body:
-    fontFamily: "Figtree, system-ui, sans-serif"
+    fontFamily: "Manrope, system-ui, sans-serif"
     fontWeight: 400
   label:
-    fontFamily: "Figtree, system-ui, sans-serif"
+    fontFamily: "Manrope, system-ui, sans-serif"
     fontWeight: 600
 rounded:
   karta: "16px"
+  vnoreny: "8px"
   pill: "999px"
 components:
   news-card:
@@ -35,10 +49,11 @@ components:
     rounded: "{rounded.pill}"
 ---
 
-<!-- SEED: core tokens are finalized in PROJECT-BRIEF.md; supporting tokens (ink, muted,
-     hover, meadow green, link color) are derived during Milestone 1. Re-run
-     /impeccable document once real CSS tokens exist to capture them and generate the
-     component sidecar. -->
+<!-- Updated 2026-07-05 to the owner's final visual direction "6a" (design-update.md).
+     That spec is authoritative for the visual skin; this file records the tokens and
+     patterns as implemented. Deviations from the spec (all contrast-driven, owner-
+     approved): meadow green #4d7549 instead of #4a9e57; link/handwritten emerald
+     #17854a instead of #1f9d55 for text uses (icons and stems keep #1f9d55). -->
 
 # Design System: Zahradnictví Úsilné
 
@@ -86,9 +101,16 @@ only appearance choice the editor gets:
 - **Nav světlá** (`#f2f7ee`): light nav text sitting directly on the meadow
   illustration, with a subtle dark text-shadow for legibility.
 
-Supporting tokens (body ink, muted text, hover states, meadow-strip green, link color)
-are **[to be derived during Milestone 1]** from this core palette, kept centralized,
-and confirmed with the owner.
+### Supporting (confirmed via design-update.md, 2026-07-05)
+- **Inkoust** (`#24382a`): primary text, card titles.
+- **Tlumená** (`#64796a`): muted text — dates, card body copy, captions, "zavřeno".
+- **Odkaz** (`#17854a`): links and handwritten sub-headings — the spec's emerald
+  darkened to pass 4.5:1 on white; graphics (icon strokes, plant stems) keep novinka.
+- **Slunce** (`#f0c04c`): flower centers and the illustration sun.
+- **Louka** (`#4d7549`) / **Louka tmavá** (`#456b42`): meadow strip greens, darkened
+  from the spec's `#4a9e57` for WCAG nav contrast (owner-approved).
+- Illustration-only tints (not UI): nebe `#cfe6f0`, hills `#8cc07f`/`#63a25e`,
+  farmhouse wall `#fff6e6`.
 
 ### Named Rules
 **The Three Styles Rule.** Novinka, výprodej, sezónní — nothing else. The editor picks
@@ -100,25 +122,32 @@ bars. The rest of the page stays in les + neutrals.
 
 ## 3. Typography
 
-**Display Font:** Bricolage Grotesque (weights 600/700, with system-ui fallback)
-**Body Font:** Figtree (weights 400/600, with system-ui fallback)
+**Display Font:** Sora (weights 600/700, with system-ui fallback)
+**Handwritten Font:** Caveat (weight 500) — section sub-headings ONLY
+**Body Font:** Manrope (weights 400/600/700, with system-ui fallback)
 
-**Character:** A friendly, slightly characterful grotesque for headings over a clean,
-warm, highly legible body face — hand-lettered postcard warmth without losing clarity.
+**Character:** A sturdy geometric sans for headings, a warm legible body face, and one
+handwritten voice that carries the postcard feeling — direction "6a" (design-update.md).
 
 ### Hierarchy
-- **Display** (700): the site name in the header sky and page titles.
-- **Headline** (600): section headings (Aktuality, Otevírací doba, Kontakt) and card titles, in les green.
-- **Body** (400, comfortable line-height): news text, about text; max line length 65–75ch.
-- **Label** (600): style pills, dates, nav items.
-
-Exact sizes **[to be fixed during Milestone 1]** — mobile-first, generous enough for
-older local customers.
+- **Display** (Sora 700): the site name in the header sky and page titles.
+- **Headline** (Sora 700, UPPERCASE, letter-spacing ≈0.095em): section headings, in les green.
+- **Handwritten** (Caveat 500, odkaz green): the "… co je u nás nového" sub-heading
+  under each section heading, pulled 22px left toward the plant icon.
+- **Card title** (Sora 700): in inkoust, not green.
+- **Body** (Manrope 400, line-height ≈1.55): card copy in tlumená; max line length 65–75ch.
+- **Label** (Manrope 600–700): style pills (700), dates (400).
+- **Nav items** (Sora 600): owner preference (2026-07-05) over the spec's Manrope.
 
 ### Named Rules
 **The Diacritics Rule.** Fonts load with the `latin-ext` subset and ěščřžýáíéůú must
-render correctly in both faces — verified before any other work proceeds. A garden
+render correctly in all three faces — verified before any other work proceeds. A garden
 center site that can't spell „sezónní" has failed.
+
+**The Handwriting Rule.** Caveat appears in exactly two places: section sub-headings
+and polaroid photo captions (owner addition 2026-07-06 — a handwritten note on the
+polaroid lip, in inkoust). Never in body copy, buttons, cards, or the nav
+(design-update.md §5, amended).
 
 ## 4. Elevation
 
@@ -139,9 +168,20 @@ The prototype (`zahradnictvi-usilne-prototyp.jsx`) is authoritative for structur
 the tokens above override its colors and fonts. Components below are the agreed set.
 
 ### Aktualita Card (signature component)
-- **Structure:** thin accent bar across the top (style color), style pill + date row,
-  headline in les, short body text, optional photo strip.
-- **Corner Style:** 16px radius, soft shadow, no border.
+- **Structure:** thin accent bar across the top (style color), then text column
+  (pill, headline in inkoust, short body text) with an optional photo column on the
+  right (≈45% of the card). With photos, the date moves to the photo column's top
+  right corner; without photos it stays next to the pill.
+- **Photos (owner's design, 2026-07-05 — supersedes the spec §2.4 thumbnail row):**
+  a scroll-snap strip showing one photo at a time, framed as a **polaroid** — white
+  border, thick bottom lip, soft shadow, square corners. *Provisional:* the owner may
+  still revisit the polaroid treatment; the 8px nested-surface radius remains the
+  fallback style for card photos if she does. The frame + strip + arrows live in
+  `PolaroidCarousel.astro` in two variants: **crop** (cards — fixed window,
+  photos fill it) and **natural** (O nás gallery — each photo keeps its own
+  proportions, frame shrink-wraps it, arrows outside in side gutters; landscape
+  spans almost the full column, portrait capped by `--max-vyska-foto`).
+- **Corner Style (card):** 16px radius, soft shadow, no border.
 - **The style (novinka/výprodej/sezónní) controls pill color and accent bar** — exactly
   as in the prototype, driven by one CMS select field.
 
@@ -152,14 +192,26 @@ the tokens above override its colors and fonts. Components below are the agreed 
 - **Active state:** a light pill (`#f2f7ee` background) with les-green text.
 - **Behavior:** the meadow strip detaches from the sky scene and stays **sticky at
   the top** (soft shadow while pinned); the sky scene scrolls away. Clicking the
-  header illustration returns home; there is no "Domů" item.
+  header illustration returns home; there is no "Domů" item. On narrow screens the
+  links **wrap into two centered rows** (owner decision 2026-07-05, supersedes the
+  6a spec's no-wrap rule; anchor offsets compensate for the taller strip).
 - **Items:** Aktuality, Otevírací doba, Kontakt (home anchors) · O nás, Sortiment (pages).
 
 ### Cards / Containers (hours, contact, sortiment categories)
 - **Background:** karta white on pozadí green.
 - **Corner Style:** 16px radius; **Shadow Strategy:** soft shadow per Elevation; no borders.
-- **Hours table:** day-range rows with right-aligned times; "zavřeno" in a warm red tone.
-- **Sortiment category card:** emoji/icon, category name in les, short muted description.
+- **Hours table:** day-range rows separated by 20%-tlumená hairlines; times right-aligned,
+  bold, tabular-nums; "zavřeno" quiet muted (tlumená 600) — the red variant is superseded.
+- **Kontakt card:** one card — contact lines with thin emerald stroke icons (novinka,
+  1.8 stroke, round caps), FB badge + IG outline icon, odkaz-green underlined links,
+  44px touch rows; map embed as a nested 8px-radius surface.
+- **Section heading block:** potted-plant icon (38×48; tulip / daisy / blossom /
+  sunflower / sprout, one per section or page) + uppercase heading + handwritten
+  sub-heading; renders as h1 on standalone pages via the `level` prop.
+- **Sortiment list (owner decision 2026-07-06, supersedes the prototype's card
+  grid):** ONE card with hairline-separated category rows — emoji, name in les,
+  short muted description. The emoji is editor-picked content per category, not UI
+  chrome (spec §5's "no emoji in UI" refers to interface elements).
 
 ### Footer
 - Les-green background, light text, exactly `© {current year} Zahradnictví Úsilné` — nothing else.

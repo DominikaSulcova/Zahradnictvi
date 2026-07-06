@@ -16,11 +16,7 @@
   width: 100%;
   height: 290px;
   overflow: hidden;
-  background: linear-gradient(#e2eff2 0%, #ebf3e6 75%, #e2edda 100%);
-}
-
-.sky-scene.compact {
-  height: 200px; /* subpages get a shorter header */
+  background: #cfe6f0; /* the spec's flat sky tint (design-update.md §1.1) */
 }
 
 .sky-scene svg {
@@ -43,21 +39,14 @@
   pointer-events: none;
 }
 
-.sky-scene.compact .sky-title {
-  top: 26px;
-}
-
 .site-name {
   margin: 0;
   font-family: var(--pismo-nadpisy);
   font-weight: 700;
-  font-size: 2.6rem;
+  /* Scales down on narrow phones so the name never wraps into the scene. */
+  font-size: clamp(1.9rem, 4.5vw + 1rem, 2.6rem);
   letter-spacing: -0.015em;
   color: var(--les);
-}
-
-.sky-scene.compact .site-name {
-  font-size: 1.9rem;
 }
 
 .site-tagline {
@@ -65,7 +54,7 @@
   font-weight: 600;
   font-size: 0.92rem;
   letter-spacing: 0.02em;
-  color: #48604c; /* darker shade of the scene's own greens, not a gray */
+  color: var(--les-tlumeny); /* darker shade of the scene's own greens, not a gray */
 }
 
 .header-home-link {
@@ -94,36 +83,54 @@
 }
 
 .strip-nav {
-  position: relative; /* keeps links above the SVG; lets the strip grow when links wrap on narrow screens */
+  position: relative; /* keeps links above the SVG; lets the strip grow when links wrap */
   min-height: var(--vyska-nav);
+  max-width: 56rem; /* same content column as .container */
+  margin-inline: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Owner decision (2026-07-05, supersedes spec §4 no-wrap): on narrow
+     screens the links wrap into two centered rows at a readable size. */
   flex-wrap: wrap;
   gap: 0.25rem;
   padding: 0.4rem 0.5rem;
 }
 
 .nav-link {
-  font-family: var(--pismo-nadpisy);
+  font-family: var(--pismo-nadpisy); /* Sora — owner preference over the spec's Manrope */
   font-weight: 600;
   font-size: 0.95rem;
+  white-space: nowrap; /* wrap BETWEEN links, never inside a label */
   color: var(--nav-svetla);
   /* Light text sits directly on the meadow; the shadow keeps it legible. */
-  text-shadow: 0 1px 5px rgba(24, 38, 26, 0.55);
-  padding: 0.35rem 0.95rem;
+  text-shadow: var(--stin-text-nav);
+  padding: 0.5rem 0.95rem; /* taller = easier to tap on phones */
   border-radius: 999px;
   text-decoration: none;
   transition: background 0.15s;
+}
+
+@media (max-width: 44rem) {
+  .nav-link {
+    font-size: 0.85rem;
+    padding: 0.55rem 0.6rem;
+  }
 }
 
 .nav-link:hover {
   background: rgba(255, 255, 255, 0.16);
 }
 
+.nav-link:focus-visible {
+  /* The site-wide green outline would vanish on the green meadow. */
+  outline-color: var(--nav-svetla);
+}
+
 .nav-link.active {
-  background: var(--nav-svetla);
+  background: var(--karta); /* spec §2.2: pure white pill, forest text */
   color: var(--les);
+  font-weight: 700;
   text-shadow: none;
 }
 

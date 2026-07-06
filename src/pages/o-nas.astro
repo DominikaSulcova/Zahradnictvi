@@ -1,16 +1,72 @@
 ---
-// "O nás" page. Milestone 3 fills in the real text and photo gallery
-// (editable through the CMS as a singleton).
+// "O nás" page: text from the editable stranky collection, plus an optional
+// photo gallery once photos exist in the content file.
+import { getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import PolaroidCarousel from '../components/PolaroidCarousel.astro';
+
+const onas = await getEntry('stranky', 'o-nas');
+if (!onas) throw new Error('Missing content file: src/content/stranky/o-nas.md');
+const { Content } = await render(onas);
 ---
 
-<BaseLayout title="O nás — Zahradnictví Úsilné" compactHeader>
+<BaseLayout
+  title="O nás — Zahradnictví Úsilné"
+  description="Malé rodinné zahradnictví v Úsilném u Českých Budějovic — kdo jsme a co pěstujeme."
+>
   <section>
-    <h1>Kdo jsme</h1>
-    <p>
-      Jsme malé rodinné zahradnictví v obci Úsilné u Českých Budějovic.
-      Pěstujeme sadbu zeleniny, balkónové květiny, trvalky i bylinky — a rádi
-      poradíme, co se bude dařit právě u vás.
-    </p>
+    <SectionTitle level={1} plant="sunflower" subtitle="naše zahradnictví">O nás</SectionTitle>
+    <div class="karta obsah">
+      <div class="text">
+        <Content />
+      </div>
+      {onas.data.photos.length > 0 && (
+        <div class="galerie">
+          <!-- One big polaroid at the end of the story; the "natural" variant
+               lets every photo keep its own shape (PolaroidCarousel.astro). -->
+          <PolaroidCarousel photos={onas.data.photos} variant="natural" width={1400} />
+        </div>
+      )}
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .obsah {
+    padding: 1.25rem;
+  }
+
+  .text {
+    font-size: 0.97rem;
+    line-height: 1.6;
+  }
+
+  .text :global(p) {
+    margin: 0 0 0.8rem;
+  }
+
+  .text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* In-text headings (## in the markdown): smaller than the page title,
+     with room above so each chapter breathes. Font + color come from the
+     global h2 rule (Sora, les). */
+  .text :global(h2) {
+    margin: 1.5rem 0 0.4rem;
+    font-size: 1.15rem;
+  }
+
+  .text :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  /* One large polaroid under the text; each photo keeps its own proportions.
+     --max-vyska-foto caps how tall a portrait photo may get (owner-tunable);
+     landscape photos are capped by the column width instead. */
+  .galerie {
+    margin-top: 1.4rem;
+    --max-vyska-foto: clamp(15rem, 55vw, 24rem);
+  }
+</style>

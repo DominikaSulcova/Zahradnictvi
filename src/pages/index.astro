@@ -1,41 +1,374 @@
 ---
-// Home page. Milestone 1: section skeleton so the nav anchors work.
-// Milestone 2 fills these with real content (aktuality from the content
-// collection, opening hours, contact + map).
+// Home page: aktuality from the content collection, opening hours,
+// contact card + map, parking info. Section order: Aktuality → Doba →
+// Kontakt → Parkování (brief order + owner additions 2026-07-06).
+import { getCollection, getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import AktualitaCard from '../components/AktualitaCard.astro';
+import PolaroidCarousel from '../components/PolaroidCarousel.astro';
+
+// Only published entries, newest first.
+const aktuality = (await getCollection('aktuality', ({ data }) => data.published))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Parking + voucher section content (editable files, CMS-ready like the
+// other stranky).
+const parkovani = await getEntry('stranky', 'parkovani');
+if (!parkovani) throw new Error('Missing content file: src/content/stranky/parkovani.md');
+const { Content: ParkovaniContent } = await render(parkovani);
+
+const poukazy = await getEntry('stranky', 'poukazy');
+if (!poukazy) throw new Error('Missing content file: src/content/stranky/poukazy.md');
+const { Content: PoukazyContent } = await render(poukazy);
 ---
 
 <BaseLayout>
+  <!-- The visible site name is a styled <p> in the header illustration, so the
+       page's actual h1 is screen-reader-only (audit 2026-07-05, P2). -->
+  <h1 class="sr-only">Zahradnictví Úsilné</h1>
+
   <section id="aktuality">
-    <h2>Aktuality</h2>
-    <p>Připravujeme — zde budou novinky, výprodeje a sezónní nabídka.</p>
-    <!-- Temporary check that both fonts render Czech diacritics correctly
-         (The Diacritics Rule). Remove in Milestone 2. -->
-    <p class="test-diakritiky">
-      Test diakritiky: Příliš žluťoučký kůň úpěl ďábelské ódy — ěščřžýáíéůú.
-    </p>
+    <SectionTitle plant="tulip" subtitle="co je u nás nového">Aktuality</SectionTitle>
+    <div class="aktuality-list">
+      {aktuality.map((entry) => <AktualitaCard entry={entry} />)}
+    </div>
   </section>
 
   <section id="doba">
-    <h2>Otevírací doba</h2>
-    <p>Připravujeme…</p>
+    <SectionTitle plant="daisy" subtitle="kdy k nám">Otevírací doba</SectionTitle>
+    <div class="hours-card karta">
+      <table>
+        <tbody>
+          <tr>
+            <th scope="row">pondělí – pátek</th>
+            <td>8:00 – 16:30</td>
+          </tr>
+          <tr>
+            <th scope="row">sobota</th>
+            <td>8:00 – 12:00</td>
+          </tr>
+          <tr>
+            <th scope="row">neděle a svátky</th>
+            <td class="closed">zavřeno</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="hours-note">Mimo otevírací dobu po telefonické domluvě.</p>
+    </div>
   </section>
 
   <section id="kontakt">
-    <h2>Kontakt</h2>
-    <p>Připravujeme…</p>
+    <SectionTitle plant="blossom" subtitle="kde nás najdete">Kontakt</SectionTitle>
+    <div class="karta contact-card">
+      <div class="contact-lines">
+        <p class="contact-line">
+          <!-- map-pin icon (spec §3.1: thin emerald strokes, round caps) -->
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21c-4-4.5-7-7.8-7-11a7 7 0 0 1 14 0c0 3.2-3 6.5-7 11z"></path>
+            <circle cx="12" cy="10" r="2.6"></circle>
+          </svg>
+          <span>
+            <strong>Úsilné 9, 370 10 Úsilné</strong><br />
+            <span class="muted">u Českých Budějovic</span>
+          </span>
+        </p>
+        <p class="contact-line">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 4h4l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path>
+          </svg>
+          <a href="tel:+420732264647">732 264 647</a>
+        </p>
+        <p class="contact-line">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5.5" width="18" height="13" rx="2"></rect>
+            <path d="M3.5 7l8.5 6 8.5-6"></path>
+          </svg>
+          <a href="mailto:marie.sulcova@volny.cz">marie.sulcova@volny.cz</a>
+        </p>
+        <p class="contact-line">
+          <span class="fb-badge" aria-hidden="true">f</span>
+          <a
+            href="https://www.facebook.com/p/Zahradnictv%C3%AD-%C3%9Asiln%C3%A9-100059199107987/?locale=cs_CZ"
+            rel="noopener"
+          >Facebook</a>
+        </p>
+        <p class="contact-line">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect>
+            <circle cx="12" cy="12" r="3.8"></circle>
+            <circle class="dot" cx="17" cy="7" r="1.1"></circle>
+          </svg>
+          <a href="https://www.instagram.com/zahradnictviusilne/?hl=cs" rel="noopener">Instagram</a>
+        </p>
+      </div>
+      <div class="map-wrap">
+        <!-- Google Maps embed (keyless, free). `output=embed` renders the
+             plain embeddable map; hl=cs keeps its UI in Czech. -->
+        <iframe
+          src="https://maps.google.com/maps?q=Zahradnictv%C3%AD+%C3%9Asiln%C3%A9,+%C3%9Asiln%C3%A9+9,+370+10+%C3%9Asiln%C3%A9&z=15&hl=cs&output=embed"
+          title="Mapa — Zahradnictví Úsilné"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section id="parkovani">
+    <SectionTitle plant="parking" subtitle="kam s autem">Parkování</SectionTitle>
+    <div class="karta parkovani-card">
+      <div class="parkovani-text">
+        <ParkovaniContent />
+      </div>
+      <!-- Both maps stay visible (no carousel): someone planning the drive
+           needs to compare them, not swipe between them. -->
+      <div class="mapy">
+        {parkovani.data.photos.map(({ foto, popisek }) => (
+          <figure class="polaroid">
+            <Image class="mapa" src={foto} width={1400} alt="" />
+            <figcaption class="popisek">{popisek}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="poukazy">
+    <SectionTitle plant="gift" subtitle="dárek, který poroste">Poukazy</SectionTitle>
+    <div class="karta poukazy-card">
+      <div class="parkovani-text">
+        <PoukazyContent />
+      </div>
+      <!-- Two presentations of the same photos, toggled by a media query
+           (the same trick as the card date): side-by-side "thrown on the
+           table" polaroids on wide screens, the carousel on phones. -->
+      <div class="poukazy-vedle">
+        {poukazy.data.photos.map(({ foto, popisek }) => (
+          <figure class="polaroid nahozeny">
+            <Image class="poukaz-foto" src={foto} width={900} alt="" />
+            <figcaption class="popisek">{popisek}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <div class="poukazy-karusel">
+        <PolaroidCarousel photos={poukazy.data.photos} variant="natural" width={900} />
+      </div>
+    </div>
   </section>
 </BaseLayout>
 
 <style>
   section + section {
-    margin-top: 2.5rem;
+    margin-top: 3rem; /* owner-tuned up from the spec's ~32px rhythm */
   }
 
-  .test-diakritiky {
-    font-family: var(--pismo-nadpisy);
+  .aktuality-list {
+    display: grid;
+    gap: 0.9rem; /* spec §1.3: ~14px between cards */
+  }
+
+  /* --- Otevírací doba --- */
+  .hours-card {
+    padding: 1.25rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+  }
+
+  /* Hairline row separators (spec §2.5: muted at 20%, none on the last row). */
+  tr + tr {
+    border-top: 1px solid color-mix(in srgb, var(--tlumena) 20%, transparent);
+  }
+
+  th {
+    padding: 0.6rem 0;
+    text-align: left;
     font-weight: 600;
+  }
+
+  td {
+    padding: 0.6rem 0;
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums; /* digits share one width, so times align */
+    color: var(--inkoust);
+  }
+
+  td.closed {
+    color: var(--tlumena); /* spec §2.5: quiet, not alarming red */
+    font-weight: 600;
+  }
+
+  .hours-note {
+    margin: 0.9rem 0 0;
+    font-size: 0.88rem;
     color: var(--tlumena);
-    font-size: 0.9rem;
+  }
+
+  /* --- Kontakt: one card with contact lines + map (spec §2.6) --- */
+  .contact-card {
+    padding: 1.25rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  /* Lines and map side by side once there's room (desktop). */
+  @media (min-width: 44rem) {
+    .contact-card {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+  }
+
+  .contact-line {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px; /* comfortable touch target on phones (spec §4) */
+    font-size: 0.94rem;
+  }
+
+  .muted {
+    color: var(--tlumena);
+    font-size: 0.85rem;
+  }
+
+  .contact-line a {
+    color: var(--odkaz);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .icon {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: var(--novinka);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .icon .dot {
+    fill: var(--novinka);
+    stroke: none;
+  }
+
+  .fb-badge {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: var(--novinka);
+    color: #fff;
+    font-family: var(--pismo-nadpisy);
+    font-weight: 700;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-wrap {
+    /* Nested surface inside the card: smaller radius than the card itself. */
+    border-radius: var(--radius-vnoreny);
+    overflow: hidden;
+    min-height: 10rem;
+    display: grid;
+  }
+
+  /* --- Parkování + Poukazy --- */
+  .parkovani-card,
+  .poukazy-card {
+    padding: 1.25rem;
+  }
+
+  .parkovani-text {
+    font-size: 0.97rem;
+    line-height: 1.6;
+  }
+
+  .parkovani-text :global(p) {
+    margin: 0;
+  }
+
+  /* Both maps visible, stacked and centered, each in its polaroid frame
+     (frame + caption styles are the global .polaroid/.popisek). */
+  .mapy {
+    margin-top: 1.4rem;
+    display: grid;
+    gap: 1.6rem;
+    justify-items: center;
+  }
+
+  .mapa {
+    display: block;
+    max-width: 100%;
+    height: auto; /* maps keep their own proportions, never cropped */
+  }
+
+  /* Wide screens: the two voucher polaroids sit next to each other, each
+     tilted a touch the other way — casually "thrown on the table". */
+  .poukazy-vedle {
+    margin-top: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.2rem;
+  }
+
+  .poukazy-vedle .polaroid {
+    max-width: calc(50% - 1.1rem); /* half the row minus its share of the gap */
+  }
+
+  .poukazy-vedle .polaroid:first-child {
+    transform: rotate(-2.2deg);
+  }
+
+  .poukazy-vedle .polaroid:last-child {
+    transform: rotate(1.8deg);
+    margin-top: 0.9rem; /* slightly lower — thrown, not aligned */
+  }
+
+  .poukaz-foto {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 24rem; /* portrait vouchers stay a hand's height */
+  }
+
+  /* Phones: the side-by-side pair hides and the carousel takes over
+     (both are in the HTML; the media query shows exactly one). */
+  .poukazy-karusel {
+    display: none;
+    margin-top: 1rem;
+    --max-vyska-foto: clamp(16rem, 80vw, 22rem);
+  }
+
+  @media (max-width: 44rem) {
+    .poukazy-vedle {
+      display: none;
+    }
+
+    .poukazy-karusel {
+      display: block;
+    }
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 10rem;
+    border: 0;
   }
 </style>

@@ -63,10 +63,34 @@ Teaching rules:
 
 ## Current state / next step
 
-- [x] Milestone 1 (code): Astro skeleton, design tokens (`src/styles/tokens.css`),
-      header placeholder (SkyScene + sticky MeadowNav), placeholder pages. Build passes.
-- [ ] Milestone 1 (deploy): connect GitHub repo to Cloudflare Pages, verify the
-      `*.pages.dev` preview. Then run the /impeccable QA pass.
-- Supporting tokens (`--inkoust`, `--tlumena`, `--louka`, `--zavreno`) are proposed,
-  not yet confirmed by the owner.
+- [x] Milestone 1: Astro skeleton, design tokens (`src/styles/tokens.css`), header
+      placeholder (SkyScene + sticky MeadowNav), placeholder pages.
+      Deployment (since 2026-07-06): git push → Cloudflare Workers Builds
+      auto-deploys the "zahradnictvi" Worker (static assets, wrangler.jsonc →
+      dist/). Preview: https://zahradnictvi.cocciron.workers.dev — manual
+      `npx wrangler deploy` is the emergency fallback only.
+- [x] Milestone 2: home page with real content — aktuality content collection
+      (3 seed entries), otevírací doba card, kontakt + Google Maps embed;
+      SectionTitle + AktualitaCard components, shared `.karta` surface.
+- [x] Design update "6a" (design-update.md, 2026-07-05): fonts Sora/Caveat/Manrope;
+      uppercase section headings + handwritten sub-headings + PlantIcon; spec
+      illustration palette; kontakt card with icons + Facebook/Instagram links
+      (former FB TODO resolved); no-wrap nav. Deviations (contrast, owner-approved):
+      `--louka` stays #4d7549; text-emerald darkened to `--odkaz` #17854a.
+- [x] Photo feature (owner design): photos right/stacked responsive column in
+      aktualita cards, polaroid frame (provisional), wrap-around scroll-snap
+      carousel with the site's first client-side JS. Audit 17/20, P2s fixed.
+- [x] Milestone 3: O nás (stranky content collection + optional gallery) +
+      Sortiment (category rows in one card from src/data/sortiment.json —
+      owner choice over the prototype grid); SectionTitle `level` prop,
+      sunflower + sprout PlantIcons. O nás text + 3 gallery photos delivered
+      by the owner (2026-07-06); Sortiment categories to expand with her mum.
+- [x] Home sections "Parkování" (text + two always-visible polaroid-framed
+      maps) + "Poukazy" (text + two tilted side-by-side polaroids on wide
+      screens, carousel on phones); nav grew to 7 items; polaroid frame
+      extracted to global .polaroid/.popisek; parking-sign + gift PlantIcons.
+- [ ] Milestone 4: Sveltia CMS + OAuth worker (/admin editor workflow).
+- Supporting tokens all confirmed via design-update.md (`--inkoust` #24382a,
+  `--tlumena` #64796a, new `--odkaz`, `--slunce`); `--zavreno` removed (spec:
+  "zavřeno" is muted, not red); `--les-tlumeny` kept for the header tagline.
 - Keep this section updated as milestones complete.

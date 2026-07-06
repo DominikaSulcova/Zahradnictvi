@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Simple placeholder favicon: a flower on forest green. -->
+  <rect width="64" height="64" rx="14" fill="#2c5e37"/>
+  <g transform="translate(32 34)">
+    <line x1="0" y1="6" x2="0" y2="22" stroke="#a8c49b" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="0" cy="-8" r="7" fill="#f2f7ee"/>
+    <circle cx="-11" cy="-2" r="7" fill="#f2f7ee"/>
+    <circle cx="11" cy="-2" r="7" fill="#f2f7ee"/>
+    <circle cx="-7" cy="10" r="7" fill="#f2f7ee"/>
+    <circle cx="7" cy="10" r="7" fill="#f2f7ee"/>
+    <circle cx="0" cy="1" r="6" fill="#e9d26a"/>
+  </g>
+</svg>

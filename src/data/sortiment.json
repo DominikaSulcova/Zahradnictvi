@@ -1,0 +1,10 @@
+{
+  "kategorie": [
+    { "emoji": "🍅", "nazev": "Sadba zeleniny", "popis": "rajčata, papriky, feferonky, saláty…" },
+    { "emoji": "🌸", "nazev": "Balkónové květiny", "popis": "muškáty, voděnky, surfinie…" },
+    { "emoji": "🌿", "nazev": "Bylinky", "popis": "bazalka, máta, rozmarýn…" },
+    { "emoji": "🌷", "nazev": "Trvalky", "popis": "do záhonů i skalek" },
+    { "emoji": "🌲", "nazev": "Vánoční stromky", "popis": "sezónně, ve dvoře" },
+    { "emoji": "🧺", "nazev": "Substráty a doplňky", "popis": "zemina, hnojiva, květináče" }
+  ]
+}

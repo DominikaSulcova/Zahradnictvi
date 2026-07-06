@@ -1,0 +1,54 @@
+---
+// Section heading block (design-update.md §2.3): plant icon on the left,
+// uppercase heading with a handwritten sub-heading tucked underneath. Usage:
+//   <SectionTitle plant="tulip" subtitle="co je u nás nového">Aktuality</SectionTitle>
+//   <SectionTitle level={1} plant="sunflower" subtitle="naše zahradnictví">O nás</SectionTitle>
+import PlantIcon from './PlantIcon.astro';
+
+interface Props {
+  subtitle?: string;
+  plant?: 'tulip' | 'daisy' | 'blossom' | 'sunflower' | 'sprout' | 'parking' | 'gift';
+  // 1 on standalone pages (their main title), 2 for home page sections.
+  level?: 1 | 2;
+}
+const { subtitle, plant, level = 2 } = Astro.props;
+// Astro renders a tag stored in a capitalized variable — same look, right semantics.
+const Heading = `h${level}` as 'h1' | 'h2';
+---
+
+<div class="section-title">
+  {plant && <PlantIcon plant={plant} />}
+  <div>
+    <Heading class="nadpis"><slot /></Heading>
+    {subtitle && <p class="podtitul">… {subtitle}</p>}
+  </div>
+</div>
+
+<style>
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .nadpis {
+    /* Size and tracking owner-tuned up from the spec's 19px/1.8px reference. */
+    margin: 0.1rem 0 0 10px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+  }
+
+  .podtitul {
+    /* Handwritten line, indented right so it reads as a note under the
+       heading (owner's tweak; spec §1.2 had it pulled left instead).
+       Caveat is used ONLY here — spec §5. */
+    margin: 0.1rem 0 0 60px;
+    font-family: var(--pismo-rukopis);
+    font-weight: 500;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: var(--odkaz);
+  }
+</style>

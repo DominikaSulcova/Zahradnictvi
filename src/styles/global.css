@@ -25,6 +25,9 @@ body {
   background: var(--pozadi);
   color: var(--inkoust);
   -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;      /* at least as tall as the viewport */
+  display: flex;
+  flex-direction: column;  /* header, nav, main, footer stack vertically */
 }
 
 h1,
@@ -48,6 +51,15 @@ section[id] {
   scroll-margin-top: calc(var(--vyska-nav) + 1rem);
 }
 
+/* On narrower screens the nav links wrap to two rows, so the pinned strip
+ * is roughly twice as tall — anchors need the extra headroom. (Threshold
+ * grew with the nav: seven items wrap earlier than five did.) */
+@media (max-width: 52rem) {
+  section[id] {
+    scroll-margin-top: calc(2.2 * var(--vyska-nav) + 1rem);
+  }
+}
+
 /* Visible keyboard focus everywhere (accessibility quality floor). */
 :focus-visible {
   outline: 3px solid var(--les);
@@ -55,7 +67,62 @@ section[id] {
 }
 
 .container {
+  /* body is a flex column (sticky footer) and flex auto-margins disable the
+   * default stretch — without an explicit width the container shrink-wraps
+   * to its content (the "narrow Sortiment page" bug, 2026-07-06). */
+  width: 100%;
   max-width: 56rem;
   margin-inline: auto;
   padding-inline: 1rem;
+}
+
+/* Visually hidden but read by screen readers — e.g. the home page's h1
+ * (visually, the site name lives in the header illustration). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The one card surface used by every content block (DESIGN.md: soft shadow,
+ * no border, 16px radius — The No-Border Rule). */
+.karta {
+  background: var(--karta);
+  border-radius: var(--radius-karta);
+  box-shadow: var(--stin-karta);
+}
+
+/* The polaroid photo frame + its handwritten caption — shared by the photo
+ * carousel (PolaroidCarousel.astro) and static figures like the parking maps.
+ * The base recipe hugs its content and ends in a caption lip; the carousel's
+ * crop variant overrides width/padding for its fixed window. */
+.polaroid {
+  position: relative;
+  width: fit-content;
+  margin: 0; /* <figure> comes with browser default margins — reset them */
+  padding: 0.45rem 0.45rem 0.3rem;
+  background: var(--karta);
+  box-shadow: var(--stin-polaroid);
+}
+
+.popisek {
+  /* Classic trick: width 0 + min-width 100% makes the caption exactly as
+     wide as the photo above it, so a long caption wraps to more lines
+     instead of stretching the frame wider than its picture. */
+  width: 0;
+  min-width: 100%;
+  min-height: 1.4rem; /* keeps the polaroid lip even with no caption */
+  margin: 0;
+  padding-top: 0.2rem;
+  text-align: center;
+  font-family: var(--pismo-rukopis);
+  font-weight: 500;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  color: var(--inkoust);
 }

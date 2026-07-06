@@ -27,7 +27,10 @@
       "Bash(dir:*)",
       "Bash(mkdir:*)",
       "Bash(cat:*)",
-      "Bash(pwd)"
+      "Bash(pwd)",
+
+      "Bash(npm run build:*)",
+      "PowerShell(npm run build)"
     ],
 
     "ask": [
@@ -49,8 +52,12 @@
       "Read(~/.ssh/**)",
       "Read(~/.aws/**)",
       "Read(~/.config/**)",
-      "Edit(~/**)",
-      "Write(~/**)",
+      "Edit(~/.ssh/**)",
+      "Edit(~/.aws/**)",
+      "Edit(~/.config/**)",
+      "Write(~/.ssh/**)",
+      "Write(~/.aws/**)",
+      "Write(~/.config/**)",
 
       "Bash(sudo:*)",
       "Bash(rm -rf:*)",

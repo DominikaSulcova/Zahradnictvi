@@ -10,13 +10,11 @@ import '../components/header/header.css';
 interface Props {
   title?: string;
   description?: string;
-  compactHeader?: boolean;
 }
 
 const {
   title = 'Zahradnictví Úsilné',
   description = 'Rodinné zahradnictví v Úsilném u Českých Budějovic — sadba zeleniny, balkónové květiny, bylinky a trvalky.',
-  compactHeader = false,
 } = Astro.props;
 
 // Evaluated at build time; the site rebuilds on every content edit,
@@ -31,20 +29,25 @@ const year = new Date().getFullYear();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <!-- Fonts: Google Fonts serves the latin-ext subset automatically,
          which covers Czech diacritics (ěščřžýáíéůú). -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Caveat:wght@500&family=Manrope:wght@400;600;700&display=swap"
     />
   </head>
   <body>
-    <!-- Clicking the illustration always returns home (there is no "Domů" nav item). -->
-    <a class="header-home-link" href="/" title="Zpět na úvod">
-      <SkyScene compact={compactHeader} />
-    </a>
+    <!-- Clicking the illustration always returns home (there is no "Domů" nav item).
+         Note: the nav strip stays OUTSIDE <header> — position:sticky only works
+         while its parent is on screen, and the header scrolls away. -->
+    <header>
+      <a class="header-home-link" href="/" title="Zpět na úvod">
+        <SkyScene />
+      </a>
+    </header>
 
     <MeadowNav />
 
@@ -59,14 +62,15 @@ const year = new Date().getFullYear();
 <style>
   main {
     padding-block: 2.25rem 1rem;
+    flex: 1;   /* main absorbs all leftover height, pushing the footer down */
   }
 
   footer {
     margin-top: 3rem;
-    padding: 1.5rem 1rem;
+    padding: 1.15rem 1rem;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     background: var(--les);
-    color: var(--pozadi);
+    color: rgba(255, 255, 255, 0.85); /* spec §2.7: white at 85% on the deep green */
   }
 </style>

@@ -1,0 +1,253 @@
+---
+// One polaroid-framed photo carousel, in two variants:
+//
+//   "crop" (default) — ONE fixed polaroid window; photos slide inside it and
+//       get cropped to fill (object-fit: cover). Used by aktuality cards,
+//       where every card should have the same tidy shape.
+//       Height knob: --vyska-foto (set by whoever uses the component).
+//
+//   "natural" — every photo keeps ITS OWN proportions, uncropped; the frame
+//       shrink-wraps each picture and the arrows sit outside the frame.
+//       Used by the O nás gallery. Landscape photos span almost the whole
+//       column (the arrow gutters take the rest); portrait photos are capped
+//       by --max-vyska-foto so they never grow too tall.
+//
+// "Evaluating each picture" happens at BUILD TIME for free: the `image()`
+// schema helper hands us ImageMetadata with the intrinsic width/height of
+// every photo. We use it to avoid upscaling small originals; the on-screen
+// sizing itself is pure CSS (max-width + max-height with auto dimensions
+// preserve the ratio, so landscape hits the width cap and portrait hits the
+// height cap — sizes stay comparable without any JavaScript).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// A gallery entry: the photo plus an optional handwritten caption shown on
+// the polaroid's bottom lip (natural variant only).
+type FotoSPopiskem = { foto: ImageMetadata; popisek?: string };
+
+interface Props {
+  // Plain images (aktuality cards) or photo+caption objects (stranky gallery).
+  photos: (ImageMetadata | FotoSPopiskem)[];
+  // Width (px) of the generated image file — use ~2× the displayed width so
+  // photos stay sharp on high-DPI screens. astro:assets does the resizing.
+  width?: number;
+  variant?: 'crop' | 'natural';
+}
+const { photos, width = 640, variant = 'crop' } = Astro.props;
+
+// Normalize both shapes to { foto, popisek? } so the template has one form.
+// ('foto' in p) is a type guard: plain ImageMetadata has no `foto` key.
+const slides: FotoSPopiskem[] = photos.map((p) => ('foto' in p ? p : { foto: p }));
+---
+
+<div class:list={['karusel', `karusel--${variant}`]}>
+  {variant === 'crop' ? (
+    <div class="polaroid">
+      <div class="photo-track">
+        {slides.map((s) => <Image class="photo" src={s.foto} width={width} alt="" />)}
+      </div>
+      {photos.length > 1 && (
+        <>
+          <button class="arrow arrow-prev" type="button" aria-label="Předchozí fotka">‹</button>
+          <button class="arrow arrow-next" type="button" aria-label="Další fotka">›</button>
+        </>
+      )}
+    </div>
+  ) : (
+    <>
+      <div class="photo-track">
+        {slides.map((s) => (
+          <div class="slide">
+            {/* <figure> + <figcaption> is the HTML pair for "image with its
+               caption" — screen readers announce them together, so the image
+               itself can keep an empty alt. */}
+            <figure class="polaroid">
+              {/* min() so a small original is never upscaled past its true size */}
+              <Image class="photo" src={s.foto} width={Math.min(width, s.foto.width)} alt="" />
+              <figcaption class="popisek">{s.popisek}</figcaption>
+            </figure>
+          </div>
+        ))}
+      </div>
+      {photos.length > 1 && (
+        <>
+          <button class="arrow arrow-prev" type="button" aria-label="Předchozí fotka">‹</button>
+          <button class="arrow arrow-next" type="button" aria-label="Další fotka">›</button>
+        </>
+      )}
+    </>
+  )}
+</div>
+
+<style>
+  /* ---------- shared ---------- */
+
+  .karusel {
+    position: relative; /* anchor for the natural variant's outside arrows */
+  }
+
+  /* The polaroid frame + caption styles themselves live in global.css
+     (.polaroid / .popisek) — they're shared with static figures like the
+     parking maps. Here we only add variant-specific overrides. */
+
+  /* The strip: slides in a row, one visible at a time; scroll-snap keeps
+     every swipe landing exactly on one — no JS needed for swiping. */
+  .photo-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* swiping and arrows are the controls */
+  }
+
+  .photo-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Prev/next arrow buttons (positioning differs per variant, below). */
+  .arrow {
+    position: absolute;
+    top: calc(50% - 0.5rem);
+    transform: translateY(-50%);
+    width: 1.7rem;
+    height: 1.7rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--les);
+    font-size: 1.15rem;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: var(--stin-sipka);
+  }
+
+  .arrow:hover {
+    background: var(--karta);
+  }
+
+  /* ---------- crop variant: one fixed window, photos fill it ---------- */
+
+  /* Unlike the shrink-wrapping global base, the crop frame IS the window:
+     full column width, classic empty lip (this variant has no captions). */
+  .karusel--crop :global(.polaroid) {
+    width: auto;
+    padding-bottom: 1.5rem;
+  }
+
+  .karusel--crop .photo {
+    flex: none;
+    width: 100%;
+    height: var(--vyska-foto, 14rem);
+    object-fit: cover; /* fill the box by cropping, never by squashing */
+    scroll-snap-align: start;
+  }
+
+  /* Arrows float over the photo's side edges, inside the frame. */
+  .karusel--crop .arrow-prev {
+    left: 0.75rem;
+  }
+
+  .karusel--crop .arrow-next {
+    right: 0.75rem;
+  }
+
+  /* ---------- natural variant: the frame adapts to each photo ---------- */
+
+  .karusel--natural {
+    /* Side gutters where the outside arrows live — also why a landscape
+       photo spans "almost" (not exactly) the whole column. */
+    padding-inline: clamp(1.8rem, 5vw, 2.6rem);
+  }
+
+  /* The track clips anything outside itself (a scroll container cuts BOTH
+     axes), so give it vertical room — otherwise the polaroid's soft bottom
+     shadow gets sliced off at the strip's edge. */
+  .karusel--natural .photo-track {
+    padding-block: 0.25rem 0.9rem;
+  }
+
+  /* Each slide is one full-width "page" of the strip, so the snap and the
+     arrow math work exactly like the crop variant; the polaroid centers
+     inside it. Track height = the tallest photo; shorter ones center. */
+  .slide {
+    flex: 0 0 100%;
+    display: grid;
+    place-items: center;
+    scroll-snap-align: start;
+  }
+
+  .karusel--natural .photo {
+    /* Auto dimensions + two caps = each photo keeps its own ratio, landscape
+       maxes out on width, portrait on height. Both knobs owner-tunable. */
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: var(--max-vyska-foto, clamp(15rem, 55vw, 24rem));
+  }
+
+  /* Arrows in the gutters, outside the polaroid frame. */
+  .karusel--natural .arrow-prev {
+    left: 0;
+  }
+
+  .karusel--natural .arrow-next {
+    right: 0;
+  }
+</style>
+
+<script>
+  // ====================== THE CAROUSEL SYSTEM (for Domi) ====================
+  // Everything above this <script> runs AT BUILD TIME and produces HTML.
+  // This block is different: Astro bundles it and ships it to the visitor's
+  // BROWSER, where it runs once after the page loads. Astro also de-duplicates
+  // it — even with five carousels on a page, the script is included once.
+  //
+  // The division of labour:
+  //   - CSS does the actual carousel: the .photo-track is a scrollable row and
+  //     scroll-snap makes every scroll settle exactly on one photo. Swiping on
+  //     a phone works with zero JavaScript. Both variants share this; in the
+  //     natural variant each "photo" is a full-width slide with a centered
+  //     polaroid, so one step is still exactly one track-width.
+  //   - JavaScript ONLY drives the two arrow buttons, which are a mouse
+  //     convenience: each click scrolls the strip by one photo-width.
+  // ==========================================================================
+
+  // matchMedia asks the browser about a media query from JS — the same string
+  // you'd write in CSS. People who set "reduce motion" in their OS get an
+  // instant jump instead of a smooth glide.
+  const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 'auto'
+    : ('smooth' as ScrollBehavior);
+
+  // querySelectorAll finds every carousel on the page; the arrows inside each
+  // one only ever steer their own .photo-track.
+  document.querySelectorAll('.karusel').forEach((frame) => {
+    const track = frame.querySelector('.photo-track');
+    if (!(track instanceof HTMLElement)) return;
+
+    // One step = the strip's visible width (clientWidth) = exactly one photo.
+    // scrollWidth is the FULL width of all photos laid side by side, so
+    // (scrollWidth - clientWidth) is the scroll position of the last photo.
+    // The carousel loops: "next" on the last photo returns to the first,
+    // "prev" on the first jumps to the last. (The 2px tolerance exists
+    // because browsers report scroll positions in fractions of a pixel.)
+    const step = (direction: number) => {
+      const max = track.scrollWidth - track.clientWidth;
+      if (direction > 0 && track.scrollLeft >= max - 2) {
+        track.scrollTo({ left: 0, behavior });
+      } else if (direction < 0 && track.scrollLeft <= 2) {
+        track.scrollTo({ left: max, behavior });
+      } else {
+        track.scrollBy({ left: direction * track.clientWidth, behavior });
+      }
+    };
+
+    // addEventListener wires a function to an event: "when this button is
+    // clicked, run step(...)". The ?. means "only if the button exists" —
+    // single-photo carousels render no arrows at all.
+    frame.querySelector('.arrow-prev')?.addEventListener('click', () => step(-1));
+    frame.querySelector('.arrow-next')?.addEventListener('click', () => step(1));
+  });
+</script>
