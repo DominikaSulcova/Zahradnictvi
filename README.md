@@ -8,8 +8,7 @@ member edits entirely through a browser.
 **Live preview:** https://zahradnictvi.cocciron.workers.dev
 **Content admin:** https://zahradnictvi.cocciron.workers.dev/admin/
 
-Built as a learning project — the owner is learning web development by
-building it (see `CLAUDE.md` for the teaching workflow).
+Built as a learning project with the help of Claude Code.
 
 ## Stack
 
@@ -52,9 +51,3 @@ Manual fallback: `npx wrangler deploy` (uploads the local `dist/`).
 - `PRODUCT.md` / `DESIGN.md` — brand strategy and the visual design system
 - `design-update.md` — the final visual direction ("6a")
 - `illustration-spec.md` — brief for the upcoming hand-drawn header artwork
-
-## Status
-
-Milestones 1–4 complete: full content site + CMS with verified editor
-workflow. Remaining: hand-drawn illustration (in progress), optimization &
-docs pass (M5), DNS switchover to the real domain (M6).
