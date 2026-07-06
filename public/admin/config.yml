@@ -1,0 +1,142 @@
+# Sveltia CMS configuration — defines what the editor can edit and how.
+# Widget/collection docs: https://sveltiacms.app/en/docs/
+# Editor-facing labels are Czech; field names match the content files.
+
+backend:
+  name: github
+  repo: DominikaSulcova/Zahradnictvi
+  branch: main
+  # The OAuth helper worker that brokers the GitHub login:
+  base_url: https://sveltia-cms-auth.cocciron.workers.dev
+
+site_url: https://zahradnictvi.cocciron.workers.dev
+display_url: https://zahradnictvi.cocciron.workers.dev
+
+# New files get ASCII names ("letni-vyprodej" not "letní-výprodej") so URLs
+# and git paths stay diacritics-free.
+slug:
+  encoding: ascii
+  clean_accents: true
+
+# Global fallback; each collection sets its own media folder below.
+media_folder: src/content/stranky/fotky
+
+collections:
+  - name: aktuality
+    label: Aktuality
+    label_singular: Aktualita
+    folder: src/content/aktuality
+    create: true
+    delete: true
+    media_folder: fotky
+    public_folder: ./fotky
+    summary: '{{title}}'
+    sortable_fields: [date, title]
+    fields:
+      - { label: Nadpis, name: title, widget: string }
+      - label: Datum
+        name: date
+        widget: datetime
+        time_format: false
+        format: 'YYYY-MM-DD'
+      - label: Styl
+        name: style
+        widget: select
+        options:
+          - { label: Novinka (zelená), value: novinka }
+          - { label: Výprodej (červená), value: vyprodej }
+          - { label: Sezónní (hnědá), value: sezonni }
+        default: novinka
+      - { label: Zveřejněno, name: published, widget: boolean, default: true }
+      - label: Fotky
+        name: photos
+        widget: list
+        required: false
+        field: { label: Fotka, name: foto, widget: image }
+      - { label: Text, name: body, widget: markdown }
+
+  - name: stranky
+    label: Stránky a sekce
+    files:
+      - name: o-nas
+        label: O nás
+        file: src/content/stranky/o-nas.md
+        media_folder: fotky
+        public_folder: ./fotky
+        fields:
+          - label: Fotogalerie
+            name: photos
+            widget: list
+            required: false
+            fields:
+              - { label: Fotka, name: foto, widget: image }
+              - { label: 'Popisek (rukopisný, na rámečku)', name: popisek, widget: string, required: false }
+          - { label: Text, name: body, widget: markdown }
+      - name: parkovani
+        label: Parkování (sekce na úvodní stránce)
+        file: src/content/stranky/parkovani.md
+        media_folder: fotky
+        public_folder: ./fotky
+        fields:
+          - label: Mapky
+            name: photos
+            widget: list
+            required: false
+            fields:
+              - { label: Obrázek, name: foto, widget: image }
+              - { label: 'Popisek (rukopisný, na rámečku)', name: popisek, widget: string, required: false }
+          - { label: Text, name: body, widget: markdown }
+      - name: poukazy
+        label: Poukazy (sekce na úvodní stránce)
+        file: src/content/stranky/poukazy.md
+        media_folder: fotky
+        public_folder: ./fotky
+        fields:
+          - label: Fotky
+            name: photos
+            widget: list
+            required: false
+            fields:
+              - { label: Fotka, name: foto, widget: image }
+              - { label: 'Popisek (rukopisný, na rámečku)', name: popisek, widget: string, required: false }
+          - { label: Text, name: body, widget: markdown }
+
+  - name: nastaveni
+    label: Otevírací doba, kontakt & sortiment
+    files:
+      - name: oteviraci-doba
+        label: Otevírací doba
+        file: src/data/oteviraci-doba.json
+        fields:
+          - label: Řádky tabulky
+            name: radky
+            widget: list
+            fields:
+              - { label: Dny, name: dny, widget: string, hint: 'např. pondělí – pátek' }
+              - { label: Čas, name: cas, widget: string, hint: 'např. 8:00 – 16:30, nebo zavřeno' }
+          - { label: Poznámka pod tabulkou, name: poznamka, widget: string, required: false }
+      - name: kontakt
+        label: Kontakt
+        file: src/data/kontakt.json
+        fields:
+          - { label: Adresa, name: adresa, widget: string }
+          - { label: Doplněk adresy, name: adresaDoplnek, widget: string, required: false }
+          - { label: Telefon, name: telefon, widget: string, hint: 'jen číslice a mezery, např. 732 264 647' }
+          - { label: E-mail, name: email, widget: string }
+          - { label: Odkaz na Facebook, name: facebook, widget: string }
+          - { label: Odkaz na Instagram, name: instagram, widget: string }
+          - label: Adresa mapy (embed)
+            name: mapa
+            widget: string
+            hint: 'Neměňte, pokud si nejste jistí — adresa vložené Google mapy.'
+      - name: sortiment
+        label: Sortiment (kategorie)
+        file: src/data/sortiment.json
+        fields:
+          - label: Kategorie
+            name: kategorie
+            widget: list
+            fields:
+              - { label: Emoji, name: emoji, widget: string, hint: 'jeden obrázkový znak, např. 🍅' }
+              - { label: Název, name: nazev, widget: string }
+              - { label: Krátký popis, name: popis, widget: string }
