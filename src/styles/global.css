@@ -51,9 +51,10 @@ section[id] {
   scroll-margin-top: calc(var(--vyska-nav) + 1rem);
 }
 
-/* On narrow phones the five nav links wrap to two rows, so the pinned strip
- * is roughly twice as tall — anchors need the extra headroom. */
-@media (max-width: 36rem) {
+/* On narrower screens the nav links wrap to two rows, so the pinned strip
+ * is roughly twice as tall — anchors need the extra headroom. (Threshold
+ * grew with the nav: six items wrap earlier than five did.) */
+@media (max-width: 48rem) {
   section[id] {
     scroll-margin-top: calc(2.2 * var(--vyska-nav) + 1rem);
   }
@@ -94,4 +95,34 @@ section[id] {
   background: var(--karta);
   border-radius: var(--radius-karta);
   box-shadow: var(--stin-karta);
+}
+
+/* The polaroid photo frame + its handwritten caption — shared by the photo
+ * carousel (PolaroidCarousel.astro) and static figures like the parking maps.
+ * The base recipe hugs its content and ends in a caption lip; the carousel's
+ * crop variant overrides width/padding for its fixed window. */
+.polaroid {
+  position: relative;
+  width: fit-content;
+  margin: 0; /* <figure> comes with browser default margins — reset them */
+  padding: 0.45rem 0.45rem 0.3rem;
+  background: var(--karta);
+  box-shadow: var(--stin-polaroid);
+}
+
+.popisek {
+  /* Classic trick: width 0 + min-width 100% makes the caption exactly as
+     wide as the photo above it, so a long caption wraps to more lines
+     instead of stretching the frame wider than its picture. */
+  width: 0;
+  min-width: 100%;
+  min-height: 1.4rem; /* keeps the polaroid lip even with no caption */
+  margin: 0;
+  padding-top: 0.2rem;
+  text-align: center;
+  font-family: var(--pismo-rukopis);
+  font-weight: 500;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  color: var(--inkoust);
 }

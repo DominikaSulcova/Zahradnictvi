@@ -86,13 +86,9 @@ const slides: FotoSPopiskem[] = photos.map((p) => ('foto' in p ? p : { foto: p }
     position: relative; /* anchor for the natural variant's outside arrows */
   }
 
-  /* Polaroid frame: thin white border, classic thick bottom lip, soft shadow. */
-  .polaroid {
-    position: relative; /* anchor for the crop variant's inside arrows */
-    padding: 0.45rem 0.45rem 1.5rem;
-    background: var(--karta);
-    box-shadow: var(--stin-polaroid);
-  }
+  /* The polaroid frame + caption styles themselves live in global.css
+     (.polaroid / .popisek) — they're shared with static figures like the
+     parking maps. Here we only add variant-specific overrides. */
 
   /* The strip: slides in a row, one visible at a time; scroll-snap keeps
      every swipe landing exactly on one — no JS needed for swiping. */
@@ -132,6 +128,13 @@ const slides: FotoSPopiskem[] = photos.map((p) => ('foto' in p ? p : { foto: p }
   }
 
   /* ---------- crop variant: one fixed window, photos fill it ---------- */
+
+  /* Unlike the shrink-wrapping global base, the crop frame IS the window:
+     full column width, classic empty lip (this variant has no captions). */
+  .karusel--crop :global(.polaroid) {
+    width: auto;
+    padding-bottom: 1.5rem;
+  }
 
   .karusel--crop .photo {
     flex: none;
@@ -173,30 +176,6 @@ const slides: FotoSPopiskem[] = photos.map((p) => ('foto' in p ? p : { foto: p }
     display: grid;
     place-items: center;
     scroll-snap-align: start;
-  }
-
-  .karusel--natural .polaroid {
-    width: fit-content; /* the frame hugs its photo */
-    margin: 0; /* <figure> comes with browser default margins — reset them */
-    padding-bottom: 0.3rem; /* the caption itself now forms the bottom lip */
-  }
-
-  /* Handwritten caption on the polaroid lip (owner addition 2026-07-06 —
-     the second sanctioned home for Caveat, next to sub-headings). */
-  .popisek {
-    /* Classic trick: width 0 + min-width 100% makes the caption exactly as
-       wide as the photo above it, so a long caption wraps to more lines
-       instead of stretching the frame wider than its picture. */
-    width: 0;
-    min-width: 100%;
-    min-height: 1.4rem; /* keeps the polaroid lip even with no caption */
-    padding-top: 0.2rem;
-    text-align: center;
-    font-family: var(--pismo-rukopis);
-    font-weight: 500;
-    font-size: 1.15rem;
-    line-height: 1.2;
-    color: var(--inkoust);
   }
 
   .karusel--natural .photo {
