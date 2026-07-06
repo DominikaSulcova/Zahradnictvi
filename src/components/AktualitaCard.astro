@@ -5,7 +5,7 @@
 // sezonni) is the only appearance choice the editor gets (The Three Styles Rule).
 import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import PolaroidCarousel from './PolaroidCarousel.astro';
 
 interface Props {
   entry: CollectionEntry<'aktuality'>;
@@ -52,22 +52,9 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
     {photos.length > 0 && (
       <div class="photo-box">
         <time datetime={entry.data.date.toISOString().slice(0, 10)}>{datum}</time>
-        <!-- The polaroid frame wraps the scroll strip: photos slide INSIDE the
-             frame, the white border and shadow stay put.
-             width = 2× the displayed column width, for crisp high-DPI screens;
-             Astro generates the resized, compressed file at build time.
-             alt="" until entries carry captions (CMS milestone). -->
-        <div class="polaroid">
-          <div class="photo-track">
-            {photos.map((photo) => <Image class="photo" src={photo} width={640} alt="" />)}
-          </div>
-          {photos.length > 1 && (
-            <>
-              <button class="arrow arrow-prev" type="button" aria-label="Předchozí fotka">‹</button>
-              <button class="arrow arrow-next" type="button" aria-label="Další fotka">›</button>
-            </>
-          )}
-        </div>
+        <!-- Shared polaroid carousel (see PolaroidCarousel.astro for the
+             whole frame + strip + arrows system). -->
+        <PolaroidCarousel photos={photos} />
       </div>
     )}
   </div>
@@ -131,76 +118,16 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
   .photo-box {
     display: grid;
     gap: 0.4rem;
+    --vyska-foto: 14rem; /* ← photo height in cards, owner-tunable */
   }
 
   .photo-box time {
     text-align: right;
   }
 
-  /* Polaroid frame: thin white border, classic thick bottom, soft shadow.
-     The white frame reads against the white card thanks to the shadow. */
-  .polaroid {
-    position: relative; /* anchor for the absolutely-positioned arrows */
-    margin: 0.4rem 1rem 0; /* owner-tuned breathing room in the photo column */
-    padding: 0.45rem 0.45rem 1.5rem; /* thick bottom = the polaroid signature */
-    background: var(--karta);
-    box-shadow: var(--stin-polaroid);
-  }
-
-  /* Prev/next arrows, floating over the photo's side edges. */
-  .arrow {
-    position: absolute;
-    /* Vertical center of the PHOTO, not the frame (the bottom lip is thicker
-       than the top border, so the frame's midpoint sits a bit too low). */
-    top: calc(50% - 0.5rem);
-    transform: translateY(-50%);
-    width: 1.7rem;
-    height: 1.7rem;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.85);
-    color: var(--les);
-    font-size: 1.15rem;
-    line-height: 1;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    box-shadow: var(--stin-sipka);
-  }
-
-  .arrow:hover {
-    background: var(--karta);
-  }
-
-  .arrow-prev {
-    left: 0.75rem;
-  }
-
-  .arrow-next {
-    right: 0.75rem;
-  }
-
-  /* The photo strip: a horizontal scroll-snap carousel, no JS needed.
-     Each photo fills the column, so scrolling always lands on one photo. */
-  .photo-track {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    /* Hide the scrollbar — swiping and (soon) arrows are the controls. */
-    scrollbar-width: none;
-  }
-
-  .photo-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .photo {
-    flex: none;
-    width: 100%;
-    height: 14rem; /* ← precise photo height, owner-tunable */
-    object-fit: cover; /* fill the box by cropping, never by squashing */
-    scroll-snap-align: start;
+  /* Owner-tuned breathing room around the carousel inside the column. */
+  .photo-box :global(.polaroid) {
+    margin: 0.4rem 1rem 0;
   }
 
   .meta-row {
@@ -251,38 +178,3 @@ const datum = new Intl.DateTimeFormat('cs-CZ', {
     margin: 0.35rem 0 0;
   }
 </style>
-
-<script>
-  // The site's first client-side JavaScript: unlike the code at the top of
-  // this file (which runs at build time), this runs in the visitor's browser.
-  // Astro includes it ONCE per page, so we wire up every photo box we find.
-
-  // People who prefer reduced motion get an instant jump instead of a glide.
-  const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ? 'auto'
-    : ('smooth' as ScrollBehavior);
-
-  document.querySelectorAll('.photo-box').forEach((box) => {
-    const track = box.querySelector('.photo-track');
-    if (!(track instanceof HTMLElement)) return;
-
-    // One step = the strip's visible width = exactly one photo;
-    // the scroll-snap CSS then settles the strip onto the nearest photo.
-    // The carousel loops: past the last photo it returns to the first,
-    // and before the first it jumps to the last. (The 2px tolerance is
-    // because scroll positions can be fractions of a pixel.)
-    const step = (direction: number) => {
-      const max = track.scrollWidth - track.clientWidth;
-      if (direction > 0 && track.scrollLeft >= max - 2) {
-        track.scrollTo({ left: 0, behavior });
-      } else if (direction < 0 && track.scrollLeft <= 2) {
-        track.scrollTo({ left: max, behavior });
-      } else {
-        track.scrollBy({ left: direction * track.clientWidth, behavior });
-      }
-    };
-
-    box.querySelector('.arrow-prev')?.addEventListener('click', () => step(-1));
-    box.querySelector('.arrow-next')?.addEventListener('click', () => step(1));
-  });
-</script>

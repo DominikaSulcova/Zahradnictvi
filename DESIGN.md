@@ -174,7 +174,9 @@ the tokens above override its colors and fonts. Components below are the agreed 
   a scroll-snap strip showing one photo at a time, framed as a **polaroid** — white
   border, thick bottom lip, soft shadow, square corners. *Provisional:* the owner may
   still revisit the polaroid treatment; the 8px nested-surface radius remains the
-  fallback style for card photos if she does.
+  fallback style for card photos if she does. The frame + strip + arrows live in
+  `PolaroidCarousel.astro`, shared with the O nás gallery (one large polaroid
+  under the story text — owner decision 2026-07-06, replaces the photo grid).
 - **Corner Style (card):** 16px radius, soft shadow, no border.
 - **The style (novinka/výprodej/sezónní) controls pill color and accent bar** — exactly
   as in the prototype, driven by one CMS select field.

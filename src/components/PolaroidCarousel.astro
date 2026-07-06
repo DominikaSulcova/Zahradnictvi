@@ -1,0 +1,150 @@
+---
+// One polaroid-framed photo window with a swipe/arrow carousel inside.
+// Shared by the aktuality cards and the O nás gallery.
+//
+// Usage:  <PolaroidCarousel photos={entry.data.photos} />
+// The photo height comes from the CSS variable --vyska-foto, set by whoever
+// uses the component (14rem in cards, taller on O nás). Arrows only render
+// when there are 2+ photos.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  photos: ImageMetadata[];
+  // Width (px) of the generated image file — use ~2× the displayed width so
+  // photos stay sharp on high-DPI screens. astro:assets does the resizing.
+  width?: number;
+}
+const { photos, width = 640 } = Astro.props;
+---
+
+<div class="polaroid">
+  <div class="photo-track">
+    {photos.map((photo) => <Image class="photo" src={photo} width={width} alt="" />)}
+  </div>
+  {photos.length > 1 && (
+    <>
+      <button class="arrow arrow-prev" type="button" aria-label="Předchozí fotka">‹</button>
+      <button class="arrow arrow-next" type="button" aria-label="Další fotka">›</button>
+    </>
+  )}
+</div>
+
+<style>
+  /* Polaroid frame: thin white border, classic thick bottom lip, soft shadow.
+     No outer margin here — spacing belongs to the page/card using it. */
+  .polaroid {
+    position: relative; /* anchor for the absolutely-positioned arrows */
+    padding: 0.45rem 0.45rem 1.5rem;
+    background: var(--karta);
+    box-shadow: var(--stin-polaroid);
+  }
+
+  /* The strip: photos in a row, one visible at a time, scroll-snap keeps
+     every swipe landing exactly on a photo — no JS needed for swiping. */
+  .photo-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* swiping and arrows are the controls */
+  }
+
+  .photo-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo {
+    flex: none;
+    width: 100%;
+    height: var(--vyska-foto, 14rem);
+    object-fit: cover; /* fill the box by cropping, never by squashing */
+    scroll-snap-align: start;
+  }
+
+  /* Prev/next arrows, floating over the photo's side edges. */
+  .arrow {
+    position: absolute;
+    /* Vertical center of the PHOTO, not the frame (the bottom lip is thicker
+       than the top border, so the frame's midpoint sits a bit too low). */
+    top: calc(50% - 0.5rem);
+    transform: translateY(-50%);
+    width: 1.7rem;
+    height: 1.7rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--les);
+    font-size: 1.15rem;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: var(--stin-sipka);
+  }
+
+  .arrow:hover {
+    background: var(--karta);
+  }
+
+  .arrow-prev {
+    left: 0.75rem;
+  }
+
+  .arrow-next {
+    right: 0.75rem;
+  }
+</style>
+
+<script>
+  // ====================== THE CAROUSEL SYSTEM (for Domi) ====================
+  // Everything above this <script> runs AT BUILD TIME and produces HTML.
+  // This block is different: Astro bundles it and ships it to the visitor's
+  // BROWSER, where it runs once after the page loads. Astro also de-duplicates
+  // it — even with five carousels on a page, the script is included once.
+  //
+  // The division of labour:
+  //   - CSS does the actual carousel: the .photo-track is a scrollable row and
+  //     scroll-snap makes every scroll settle exactly on one photo. Swiping on
+  //     a phone works with zero JavaScript.
+  //   - JavaScript ONLY drives the two arrow buttons, which are a mouse
+  //     convenience: each click scrolls the strip by one photo-width.
+  // ==========================================================================
+
+  // matchMedia asks the browser about a media query from JS — the same string
+  // you'd write in CSS. People who set "reduce motion" in their OS get an
+  // instant jump instead of a smooth glide.
+  const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 'auto'
+    : ('smooth' as ScrollBehavior);
+
+  // querySelectorAll finds every carousel on the page; the arrows inside each
+  // one only ever steer their own .photo-track.
+  document.querySelectorAll('.polaroid').forEach((frame) => {
+    const track = frame.querySelector('.photo-track');
+    if (!(track instanceof HTMLElement)) return;
+
+    // One step = the strip's visible width (clientWidth) = exactly one photo.
+    // scrollWidth is the FULL width of all photos laid side by side, so
+    // (scrollWidth - clientWidth) is the scroll position of the last photo.
+    // The carousel loops: "next" on the last photo returns to the first,
+    // "prev" on the first jumps to the last. (The 2px tolerance exists
+    // because browsers report scroll positions in fractions of a pixel.)
+    const step = (direction: number) => {
+      const max = track.scrollWidth - track.clientWidth;
+      if (direction > 0 && track.scrollLeft >= max - 2) {
+        track.scrollTo({ left: 0, behavior });
+      } else if (direction < 0 && track.scrollLeft <= 2) {
+        track.scrollTo({ left: max, behavior });
+      } else {
+        track.scrollBy({ left: direction * track.clientWidth, behavior });
+      }
+    };
+
+    // addEventListener wires a function to an event: "when this button is
+    // clicked, run step(...)". The ?. means "only if the button exists" —
+    // single-photo carousels render no arrows at all.
+    frame.querySelector('.arrow-prev')?.addEventListener('click', () => step(-1));
+    frame.querySelector('.arrow-next')?.addEventListener('click', () => step(1));
+  });
+</script>
