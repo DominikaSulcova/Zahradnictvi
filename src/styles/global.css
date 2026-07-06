@@ -66,6 +66,10 @@ section[id] {
 }
 
 .container {
+  /* body is a flex column (sticky footer) and flex auto-margins disable the
+   * default stretch — without an explicit width the container shrink-wraps
+   * to its content (the "narrow Sortiment page" bug, 2026-07-06). */
+  width: 100%;
   max-width: 56rem;
   margin-inline: auto;
   padding-inline: 1rem;
