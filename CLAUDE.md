@@ -75,8 +75,14 @@ Teaching rules:
       illustration palette; kontakt card with icons + Facebook/Instagram links
       (former FB TODO resolved); no-wrap nav. Deviations (contrast, owner-approved):
       `--louka` stays #4d7549; text-emerald darkened to `--odkaz` #17854a.
-      Watch-item for M3: Sortiment card grid per spec §4 (single column, locked).
-- [ ] Milestone 3: O nás + Sortiment pages.
+- [x] Photo feature (owner design): photos right/stacked responsive column in
+      aktualita cards, polaroid frame (provisional), wrap-around scroll-snap
+      carousel with the site's first client-side JS. Audit 17/20, P2s fixed.
+- [x] Milestone 3: O nás (stranky content collection + optional gallery) +
+      Sortiment (category rows in one card from src/data/sortiment.json —
+      owner choice over the prototype grid); SectionTitle `level` prop,
+      sunflower + sprout PlantIcons. Open: Domi writes the real O nás text
+      (TODO in src/content/stranky/o-nas.md).
 - Supporting tokens all confirmed via design-update.md (`--inkoust` #24382a,
   `--tlumena` #64796a, new `--odkaz`, `--slunce`); `--zavreno` removed (spec:
   "zavřeno" is muted, not red); `--les-tlumeny` kept for the header tagline.

@@ -199,9 +199,13 @@ the tokens above override its colors and fonts. Components below are the agreed 
 - **Kontakt card:** one card — contact lines with thin emerald stroke icons (novinka,
   1.8 stroke, round caps), FB badge + IG outline icon, odkaz-green underlined links,
   44px touch rows; map embed as a nested 8px-radius surface.
-- **Section heading block:** potted-plant icon (38×48; tulip / daisy / blossom branch,
-  one per section) + uppercase heading + handwritten sub-heading.
-- **Sortiment category card:** emoji/icon, category name in les, short muted description.
+- **Section heading block:** potted-plant icon (38×48; tulip / daisy / blossom /
+  sunflower / sprout, one per section or page) + uppercase heading + handwritten
+  sub-heading; renders as h1 on standalone pages via the `level` prop.
+- **Sortiment list (owner decision 2026-07-06, supersedes the prototype's card
+  grid):** ONE card with hairline-separated category rows — emoji, name in les,
+  short muted description. The emoji is editor-picked content per category, not UI
+  chrome (spec §5's "no emoji in UI" refers to interface elements).
 
 ### Footer
 - Les-green background, light text, exactly `© {current year} Zahradnictví Úsilné` — nothing else.
