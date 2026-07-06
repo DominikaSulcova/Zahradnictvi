@@ -158,6 +158,13 @@ const slides: FotoSPopiskem[] = photos.map((p) => ('foto' in p ? p : { foto: p }
     padding-inline: clamp(1.8rem, 5vw, 2.6rem);
   }
 
+  /* The track clips anything outside itself (a scroll container cuts BOTH
+     axes), so give it vertical room — otherwise the polaroid's soft bottom
+     shadow gets sliced off at the strip's edge. */
+  .karusel--natural .photo-track {
+    padding-block: 0.25rem 0.9rem;
+  }
+
   /* Each slide is one full-width "page" of the strip, so the snap and the
      arrow math work exactly like the crop variant; the polaroid centers
      inside it. Track height = the tallest photo; shorter ones center. */
