@@ -144,8 +144,10 @@ handwritten voice that carries the postcard feeling — direction "6a" (design-u
 render correctly in all three faces — verified before any other work proceeds. A garden
 center site that can't spell „sezónní" has failed.
 
-**The Handwriting Rule.** Caveat appears only in section sub-headings — never in body
-copy, buttons, cards, or the nav (design-update.md §5).
+**The Handwriting Rule.** Caveat appears in exactly two places: section sub-headings
+and polaroid photo captions (owner addition 2026-07-06 — a handwritten note on the
+polaroid lip, in inkoust). Never in body copy, buttons, cards, or the nav
+(design-update.md §5, amended).
 
 ## 4. Elevation
 

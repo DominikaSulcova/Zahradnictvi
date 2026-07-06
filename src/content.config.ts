@@ -32,8 +32,20 @@ const stranky = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/stranky' }),
   schema: ({ image }) =>
     z.object({
-      // Optional gallery (courtyard, greenhouses, cats…) — renders only when present.
-      photos: z.array(image()).default([]),
+      // Optional gallery (courtyard, greenhouses, cats…) — renders only when
+      // present. Each entry pairs a photo with an optional handwritten
+      // caption ("popisek") shown on the polaroid's bottom lip:
+      //   photos:
+      //     - foto: ./fotky/dvorek.jpg
+      //       popisek: náš dvorek v květnu
+      photos: z
+        .array(
+          z.object({
+            foto: image(),
+            popisek: z.string().optional(),
+          })
+        )
+        .default([]),
     }),
 });
 

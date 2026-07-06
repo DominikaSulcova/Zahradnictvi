@@ -1,8 +1,11 @@
 ---
-photos: 
-  - ./fotky/o-nas-1.jpg
-  - ./fotky/o-nas-2.png
-  - ./fotky/o-nas-3.png
+photos:
+  - foto: ./fotky/o-nas-1.jpg
+    popisek: venkovní prodejní plocha
+  - foto: ./fotky/o-nas-2.png
+    popisek: náš první skleník plný jarních macešek
+  - foto: ./fotky/o-nas-3.png
+    popisek: jedna z našich mnoha zahradnických koček
 ---
 
 ## Kde to všechno začalo

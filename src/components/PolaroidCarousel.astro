@@ -21,21 +21,30 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
+// A gallery entry: the photo plus an optional handwritten caption shown on
+// the polaroid's bottom lip (natural variant only).
+type FotoSPopiskem = { foto: ImageMetadata; popisek?: string };
+
 interface Props {
-  photos: ImageMetadata[];
+  // Plain images (aktuality cards) or photo+caption objects (stranky gallery).
+  photos: (ImageMetadata | FotoSPopiskem)[];
   // Width (px) of the generated image file — use ~2× the displayed width so
   // photos stay sharp on high-DPI screens. astro:assets does the resizing.
   width?: number;
   variant?: 'crop' | 'natural';
 }
 const { photos, width = 640, variant = 'crop' } = Astro.props;
+
+// Normalize both shapes to { foto, popisek? } so the template has one form.
+// ('foto' in p) is a type guard: plain ImageMetadata has no `foto` key.
+const slides: FotoSPopiskem[] = photos.map((p) => ('foto' in p ? p : { foto: p }));
 ---
 
 <div class:list={['karusel', `karusel--${variant}`]}>
   {variant === 'crop' ? (
     <div class="polaroid">
       <div class="photo-track">
-        {photos.map((photo) => <Image class="photo" src={photo} width={width} alt="" />)}
+        {slides.map((s) => <Image class="photo" src={s.foto} width={width} alt="" />)}
       </div>
       {photos.length > 1 && (
         <>
@@ -47,12 +56,16 @@ const { photos, width = 640, variant = 'crop' } = Astro.props;
   ) : (
     <>
       <div class="photo-track">
-        {photos.map((photo) => (
+        {slides.map((s) => (
           <div class="slide">
-            <div class="polaroid">
+            {/* <figure> + <figcaption> is the HTML pair for "image with its
+               caption" — screen readers announce them together, so the image
+               itself can keep an empty alt. */}
+            <figure class="polaroid">
               {/* min() so a small original is never upscaled past its true size */}
-              <Image class="photo" src={photo} width={Math.min(width, photo.width)} alt="" />
-            </div>
+              <Image class="photo" src={s.foto} width={Math.min(width, s.foto.width)} alt="" />
+              <figcaption class="popisek">{s.popisek}</figcaption>
+            </figure>
           </div>
         ))}
       </div>
@@ -157,6 +170,26 @@ const { photos, width = 640, variant = 'crop' } = Astro.props;
 
   .karusel--natural .polaroid {
     width: fit-content; /* the frame hugs its photo */
+    margin: 0; /* <figure> comes with browser default margins — reset them */
+    padding-bottom: 0.3rem; /* the caption itself now forms the bottom lip */
+  }
+
+  /* Handwritten caption on the polaroid lip (owner addition 2026-07-06 —
+     the second sanctioned home for Caveat, next to sub-headings). */
+  .popisek {
+    /* Classic trick: width 0 + min-width 100% makes the caption exactly as
+       wide as the photo above it, so a long caption wraps to more lines
+       instead of stretching the frame wider than its picture. */
+    width: 0;
+    min-width: 100%;
+    min-height: 1.4rem; /* keeps the polaroid lip even with no caption */
+    padding-top: 0.2rem;
+    text-align: center;
+    font-family: var(--pismo-rukopis);
+    font-weight: 500;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    color: var(--inkoust);
   }
 
   .karusel--natural .photo {
