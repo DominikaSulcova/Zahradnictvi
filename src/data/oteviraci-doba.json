@@ -1,0 +1,8 @@
+{
+  "radky": [
+    { "dny": "pondělí – pátek", "cas": "8:00 – 16:30" },
+    { "dny": "sobota", "cas": "8:00 – 12:00" },
+    { "dny": "neděle a svátky", "cas": "zavřeno" }
+  ],
+  "poznamka": "Mimo otevírací dobu po telefonické domluvě."
+}
