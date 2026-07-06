@@ -26,4 +26,15 @@ const aktuality = defineCollection({
     }),
 });
 
-export const collections = { aktuality };
+// Editable standalone pages ("stranky") — currently just O nás. Same idea as
+// aktuality: one markdown file per page, edited through the CMS from M4 on.
+const stranky = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/stranky' }),
+  schema: ({ image }) =>
+    z.object({
+      // Optional gallery (courtyard, greenhouses, cats…) — renders only when present.
+      photos: z.array(image()).default([]),
+    }),
+});
+
+export const collections = { aktuality, stranky };

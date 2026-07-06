@@ -1,16 +1,65 @@
 ---
-// "O nás" page. Milestone 3 fills in the real text and photo gallery
-// (editable through the CMS as a singleton).
+// "O nás" page: text from the editable stranky collection, plus an optional
+// photo gallery once photos exist in the content file.
+import { getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+
+const onas = await getEntry('stranky', 'o-nas');
+if (!onas) throw new Error('Missing content file: src/content/stranky/o-nas.md');
+const { Content } = await render(onas);
 ---
 
-<BaseLayout title="O nás — Zahradnictví Úsilné">
+<BaseLayout
+  title="O nás — Zahradnictví Úsilné"
+  description="Malé rodinné zahradnictví v Úsilném u Českých Budějovic — kdo jsme a co pěstujeme."
+>
   <section>
-    <h1>O nás</h1>
-    <p>
-      Jsme malé rodinné zahradnictví v obci Úsilné u Českých Budějovic.
-      Pěstujeme sadbu zeleniny, balkónové květiny, trvalky i bylinky — a rádi
-      poradíme, co se bude dařit právě u vás.
-    </p>
+    <SectionTitle level={1} plant="sunflower" subtitle="naše zahradnictví">O nás</SectionTitle>
+    <div class="karta obsah">
+      <div class="text">
+        <Content />
+      </div>
+      {onas.data.photos.length > 0 && (
+        <div class="galerie">
+          {onas.data.photos.map((photo) => <Image class="foto" src={photo} width={640} alt="" />)}
+        </div>
+      )}
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .obsah {
+    padding: 1.25rem;
+  }
+
+  .text {
+    font-size: 0.97rem;
+    line-height: 1.6;
+  }
+
+  .text :global(p) {
+    margin: 0 0 0.8rem;
+  }
+
+  .text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Responsive photo grid: as many 10rem-wide columns as fit, no breakpoints. */
+  .galerie {
+    margin-top: 1.1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .foto {
+    width: 100%;
+    height: 8.5rem;
+    object-fit: cover;
+    border-radius: var(--radius-vnoreny);
+  }
+</style>
