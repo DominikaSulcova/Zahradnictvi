@@ -100,6 +100,11 @@ Teaching rules:
 - [ ] Milestone 5: image optimization, SEO, accessibility pass, docs
       (navod-pro-redaktora.md, header-illustration.md → illustration-spec.md
       exists, deployment.md).
+- [ ] Phase 2 visuals — GATE before showing mum / M6: replace the placeholder
+      SVGs with the owner's hand-drawn Procreate layers (per
+      illustration-spec.md) and wire the existing animation classes to them.
+      Owner is drawing (started 2026-07-06, expect a few days). The site is
+      NOT to be shared with the editor until final visuals are in.
 - [ ] Milestone 6: DNS switchover (update OAuth app homepage + worker
       ALLOWED_DOMAINS + site_url/display_url in config.yml when the real
       domain lands).

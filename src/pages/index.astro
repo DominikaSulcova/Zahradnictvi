@@ -125,8 +125,21 @@ const { Content: PoukazyContent } = await render(poukazy);
       <div class="mapy">
         {parkovani.data.photos.map(({ foto, popisek }) => (
           <figure class="polaroid">
-            <Image class="mapa" src={foto} width={1400} alt="" />
+            {/* The map itself is a button: clicking opens the full-size view
+                in the <dialog> below (native modal: Esc + backdrop included). */}
+            <button
+              class="mapa-zoom"
+              type="button"
+              aria-label={`Zvětšit mapu${popisek ? `: ${popisek}` : ''}`}
+            >
+              <Image class="mapa" src={foto} width={1400} alt="" />
+            </button>
             <figcaption class="popisek">{popisek}</figcaption>
+            <dialog class="lightbox">
+              {/* near-original resolution for reading the map details */}
+              <Image class="lightbox-obraz" src={foto} width={Math.min(2000, foto.width)} alt="" />
+              <button class="lightbox-zavrit" type="button" aria-label="Zavřít">×</button>
+            </dialog>
           </figure>
         ))}
       </div>
@@ -313,6 +326,53 @@ const { Content: PoukazyContent } = await render(poukazy);
     height: auto; /* maps keep their own proportions, never cropped */
   }
 
+  /* The clickable map: a button stripped of its button looks. */
+  .mapa-zoom {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+
+  /* Full-size map view in a native <dialog>. */
+  .lightbox {
+    border: 0;
+    padding: 0.45rem; /* thin polaroid-style frame around the big map */
+    background: var(--karta);
+    box-shadow: var(--stin-polaroid);
+  }
+
+  .lightbox::backdrop {
+    background: rgba(24, 38, 26, 0.65);
+  }
+
+  .lightbox-obraz {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(92vw, 75rem);
+    max-height: 85vh;
+  }
+
+  .lightbox-zavrit {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--les);
+    font-size: 1.3rem;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: var(--stin-sipka);
+  }
+
   /* Wide screens: the two voucher polaroids sit next to each other, each
      tilted a touch the other way — casually "thrown on the table". */
   .poukazy-vedle {
@@ -369,3 +429,23 @@ const { Content: PoukazyContent } = await render(poukazy);
     border: 0;
   }
 </style>
+
+<script>
+  // Map lightbox: clicking a parking map opens its full-resolution version
+  // in a native <dialog>. showModal() puts the dialog in the browser's "top
+  // layer": the page behind is locked, Esc closes, and the dimmed ::backdrop
+  // is drawn for us — a whole lightbox with almost no code.
+  document.querySelectorAll('.mapa-zoom').forEach((button) => {
+    const dialog = button.closest('figure')?.querySelector('dialog');
+    if (!(dialog instanceof HTMLDialogElement)) return;
+
+    button.addEventListener('click', () => dialog.showModal());
+    dialog.querySelector('.lightbox-zavrit')?.addEventListener('click', () => dialog.close());
+
+    // Backdrop click closes too: a click on the dimmed area targets the
+    // <dialog> element itself; clicks on the image target its children.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
+</script>
