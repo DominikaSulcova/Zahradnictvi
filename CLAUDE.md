@@ -89,7 +89,20 @@ Teaching rules:
       maps) + "Poukazy" (text + two tilted side-by-side polaroids on wide
       screens, carousel on phones); nav grew to 7 items; polaroid frame
       extracted to global .polaroid/.popisek; parking-sign + gift PlantIcons.
-- [ ] Milestone 4: Sveltia CMS + OAuth worker (/admin editor workflow).
+- [x] Milestone 4 (2026-07-06): Sveltia CMS at /admin (public/admin/ — app
+      shell + Czech config.yml covering aktuality, stranky, doba/kontakt/
+      sortiment) + sveltia-cms-auth OAuth worker (separate Worker, GitHub
+      OAuth app; secrets live in the worker's dashboard vars). Hours +
+      kontakt extracted to src/data/*.json. Editor workflow verified
+      end-to-end: owner created a real aktualita with photo via /admin →
+      commit → auto-build → live. Open: mum's GitHub account + repo
+      collaborator invite; editor guide (navod-pro-redaktora.md) in M5.
+- [ ] Milestone 5: image optimization, SEO, accessibility pass, docs
+      (navod-pro-redaktora.md, header-illustration.md → illustration-spec.md
+      exists, deployment.md).
+- [ ] Milestone 6: DNS switchover (update OAuth app homepage + worker
+      ALLOWED_DOMAINS + site_url/display_url in config.yml when the real
+      domain lands).
 - Supporting tokens all confirmed via design-update.md (`--inkoust` #24382a,
   `--tlumena` #64796a, new `--odkaz`, `--slunce`); `--zavreno` removed (spec:
   "zavřeno" is muted, not red); `--les-tlumeny` kept for the header tagline.
