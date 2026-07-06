@@ -64,9 +64,11 @@ Teaching rules:
 ## Current state / next step
 
 - [x] Milestone 1: Astro skeleton, design tokens (`src/styles/tokens.css`), header
-      placeholder (SkyScene + sticky MeadowNav), placeholder pages. Deployed via
-      Cloudflare Workers static assets (wrangler.jsonc → dist/), auto-build on push.
-      Preview: https://zahradnictvi-usilne.cocciron.workers.dev
+      placeholder (SkyScene + sticky MeadowNav), placeholder pages.
+      Deployment (since 2026-07-06): git push → Cloudflare Workers Builds
+      auto-deploys the "zahradnictvi" Worker (static assets, wrangler.jsonc →
+      dist/). Preview: https://zahradnictvi.cocciron.workers.dev — manual
+      `npx wrangler deploy` is the emergency fallback only.
 - [x] Milestone 2: home page with real content — aktuality content collection
       (3 seed entries), otevírací doba card, kontakt + Google Maps embed;
       SectionTitle + AktualitaCard components, shared `.karta` surface.
