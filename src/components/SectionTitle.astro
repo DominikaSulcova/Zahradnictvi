@@ -2,19 +2,24 @@
 // Section heading block (design-update.md §2.3): plant icon on the left,
 // uppercase heading with a handwritten sub-heading tucked underneath. Usage:
 //   <SectionTitle plant="tulip" subtitle="co je u nás nového">Aktuality</SectionTitle>
+//   <SectionTitle level={1} plant="sunflower" subtitle="naše zahradnictví">O nás</SectionTitle>
 import PlantIcon from './PlantIcon.astro';
 
 interface Props {
   subtitle?: string;
-  plant?: 'tulip' | 'daisy' | 'blossom';
+  plant?: 'tulip' | 'daisy' | 'blossom' | 'sunflower' | 'sprout';
+  // 1 on standalone pages (their main title), 2 for home page sections.
+  level?: 1 | 2;
 }
-const { subtitle, plant } = Astro.props;
+const { subtitle, plant, level = 2 } = Astro.props;
+// Astro renders a tag stored in a capitalized variable — same look, right semantics.
+const Heading = `h${level}` as 'h1' | 'h2';
 ---
 
 <div class="section-title">
   {plant && <PlantIcon plant={plant} />}
   <div>
-    <h2><slot /></h2>
+    <Heading class="nadpis"><slot /></Heading>
     {subtitle && <p class="podtitul">… {subtitle}</p>}
   </div>
 </div>
@@ -27,7 +32,7 @@ const { subtitle, plant } = Astro.props;
     margin-bottom: 14px;
   }
 
-  h2 {
+  .nadpis {
     /* Size and tracking owner-tuned up from the spec's 19px/1.8px reference. */
     margin: 0.1rem 0 0 10px;
     font-size: 1.5rem;

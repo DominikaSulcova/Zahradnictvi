@@ -1,9 +1,10 @@
 ---
 // Little potted-plant icons for section headings (design-update.md §3.4).
-// All three share the terracotta pot and green stem; only the flower differs:
-// tulip (Aktuality), daisy (Otevírací doba), blossom branch (Kontakt).
+// All share the terracotta pot and green stem; only the flower differs:
+// tulip (Aktuality), daisy (Otevírací doba), blossom branch (Kontakt),
+// sunflower (O nás), sprout (Sortiment).
 interface Props {
-  plant: 'tulip' | 'daisy' | 'blossom';
+  plant: 'tulip' | 'daisy' | 'blossom' | 'sunflower' | 'sprout';
 }
 const { plant } = Astro.props;
 ---
@@ -33,6 +34,32 @@ const { plant } = Astro.props;
       <circle cx="16.4" cy="7.5" r="3.1" fill="var(--vyprodej)"></circle>
       <circle cx="21.6" cy="7.5" r="3.1" fill="var(--vyprodej)"></circle>
       <circle cx="19" cy="12" r="3.4" fill="var(--slunce)"></circle>
+    </>
+  )}
+
+  {plant === 'sunflower' && (
+    <>
+      <path class="stem" d="M19 31 V15"></path>
+      <path d="M19 26 C15 24.5 13.5 21 14 18 C17 19.5 19 22 19 26 Z" fill="var(--novinka)"></path>
+      <path d="M19 24 C23 22.5 24.5 19.5 24 17 C21 18.2 19 20.5 19 24 Z" fill="var(--novinka)" opacity="0.75"></path>
+      {/* eight sun-yellow petals around a seed-brown center */}
+      <circle cx="24.5" cy="10" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="22.9" cy="13.9" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="19" cy="15.5" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="15.1" cy="13.9" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="13.5" cy="10" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="15.1" cy="6.1" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="19" cy="4.5" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="22.9" cy="6.1" r="2.8" fill="var(--slunce)"></circle>
+      <circle cx="19" cy="10" r="3.2" fill="var(--sezonni)"></circle>
+    </>
+  )}
+
+  {plant === 'sprout' && (
+    <>
+      <path class="stem" d="M19 31 V19"></path>
+      <path d="M19 21 C13 20 10.5 15.5 11 11 C16 12.5 19 16 19 21 Z" fill="var(--novinka)"></path>
+      <path d="M19 21 C25 20 27.5 15.5 27 11 C22 12.5 19 16 19 21 Z" fill="var(--novinka)" opacity="0.75"></path>
     </>
   )}
 
