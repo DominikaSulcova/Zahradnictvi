@@ -48,6 +48,18 @@ const { Content } = await render(onas);
     margin-bottom: 0;
   }
 
+  /* In-text headings (## in the markdown): smaller than the page title,
+     with room above so each chapter breathes. Font + color come from the
+     global h2 rule (Sora, les). */
+  .text :global(h2) {
+    margin: 1.5rem 0 0.4rem;
+    font-size: 1.15rem;
+  }
+
+  .text :global(h2:first-child) {
+    margin-top: 0;
+  }
+
   /* Responsive photo grid: as many 10rem-wide columns as fit, no breakpoints. */
   .galerie {
     margin-top: 1.1rem;
